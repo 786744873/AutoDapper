@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XDF.Core\XDF.Core.csproj" />
+    <ProjectReference Include="..\XDF.Data\XDF.Data.csproj" />
+  </ItemGroup>
+
+</Project>
