@@ -26,5 +26,10 @@ namespace XDF.Web.Controllers
             //根据主键获取一条记录
             return EmployeeService.Instance.Find(1);
         }
+
+        public EmployeeEntity Hah()
+        {
+            return  new EmployeeEntity();
+        }
     }
 }
