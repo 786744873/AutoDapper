@@ -12,66 +12,65 @@ namespace XDF.Web.Middleware
 {
     public class ErrorHandlingMiddleware
     {
-        public readonly RequestDelegate _next;
-        public ErrorHandlingMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
-        public async Task Invoke(HttpContext context)
-        {
-            try
-            {
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                var statusCode = context.Response.StatusCode;
-                if (ex is ArgumentException)
-                {
-                    statusCode = 200;
-                }
-                await HandleExceptionAsync(context, statusCode, ex.Message);
-                throw;
-            }
-            finally
-            {
-                var statusCode = context.Response.StatusCode;
-                var msg = "";
-                if (statusCode == 401)
-                {
-                    msg = "未授权";
-                }
-                else if (statusCode == 404)
-                {
-                    msg = "未找到服务";
-                }
-                else if (statusCode == 502)
-                {
-                    msg = "请求错误";
-                }
-                else if (statusCode != 200)
-                {
-                    msg = "未知错误";
-                }
-                if (!string.IsNullOrWhiteSpace(msg))
-                {
-                    await HandleExceptionAsync(context, statusCode, msg);
-                }
-            }
-        }
-        private Task HandleExceptionAsync(HttpContext context, int statusCode, string msg)
-        {
-            AjaxResultModel<string> data = AjaxResult.Error<string>(statusCode, msg);
-            var result = JsonConvert.SerializeObject(data);
-            context.Response.ContentType = "application/json;charset=utf-8";
-            return context.Response.WriteAsync(result);
-        }
+            private readonly RequestDelegate _next;
+            private string _ex = "";
 
+            public ErrorHandlingMiddleware(RequestDelegate next)
+            {
+                _next = next;
+            }
+
+            public async Task Invoke(HttpContext context)
+            {
+                _ex = "";
+                try
+                {
+
+                    await _next(context);
+                }
+                catch (Exception ex)
+                {
+                    _ex = ex.Message + ":" + ex.StackTrace;
+                }
+                finally
+                {
+                    if (context.Response.StatusCode > 400 || !_ex.IsStringEmpty())
+                    {
+                        await HandleExceptionAsync(context);
+                    }
+                }
+            }
+
+            private Task HandleExceptionAsync(HttpContext context)
+            {
+                var statusCode = context.Response.StatusCode;
+                var msg = "服务器内部错误";
+                switch (statusCode)
+                {
+                    case 401:
+                        msg = "未授权";
+                        break;
+                    case 404:
+                        msg = "未找到接口";
+                        break;
+                    case 500:
+                        msg = "服务器内部错误";
+                        break;
+                }
+                if (!_ex.IsStringEmpty())
+                {
+                    //AppLogService.Instance.Error(_ex, context.Request.Path);
+                }
+                context.Response.ContentType = "application/json;charset=utf-8";
+                return context.Response.WriteAsync(AjaxResult.Error<string>(statusCode, msg).ToString());
+            }
+        
     }
     public static class ErrorHandleExtensions
     {
-        public static IApplicationBuilder UseErrorHandling(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseErrorHandling(this IApplicationBuilder builder, Action action = null)
         {
+            action?.Invoke();
             return builder.UseMiddleware<ErrorHandlingMiddleware>();
         }
     }

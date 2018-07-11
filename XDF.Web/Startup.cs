@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
+using NLog.Extensions.Logging;
+using NLog.Web;
 using XDF.Web.Middleware;
 
 namespace XDF.Web
@@ -48,7 +50,7 @@ namespace XDF.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -68,8 +70,9 @@ namespace XDF.Web
             //});
             app.UseErrorHandling();
             app.UseMvc();
-
-
+            app.UseStaticFiles();
+            loggerFactory.AddNLog();//添加NLog
+            env.ConfigureNLog("nlog.config");//读取Nlog配置文件
         }
     }
 }
