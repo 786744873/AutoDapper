@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,15 @@ namespace XDF.Web.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            NLogHelper.Info("hahha");
+            var total = 200000;
+            var sw = new Stopwatch();
+            sw.Start();
+            for (int i = 0; i < total; i++)
+            {
+                NLogHelper.Info("nlog bigdata test: " + i);
+            }
+            sw.Stop();
+            NLogHelper.Info($"total: {total}, Elapsed:{sw.ElapsedMilliseconds}");
             return "value"+10/id;
         }
 
