@@ -11,7 +11,7 @@ namespace XDF.Core.Helper.JsonConfig
         private static Dictionary<string, string> _mySqlconnection;
         private static Dictionary<string, string> _sqlServerconnection;
         private static Dictionary<string, string> _apiurl;
-        private static Dictionary<string, string> _mongo;
+        private static string _mongo;
         private static string _redisStr;
    
         private static string _taskStr;
@@ -133,20 +133,14 @@ namespace XDF.Core.Helper.JsonConfig
                 return _redisStr;
             }
         }
-        public static Dictionary<string, string> GetAppMongoStr
+        public static string GetAppMongoStr
         {
             get
             {
                 if(_mongo==null) {
                     lock (Lock) {
                         if(_mongo == null) {
-                            var mongo = ConfigurationRoot.GetSection("Mongo");
-                            _mongo = new Dictionary<string, string>
-                            {
-                                {"Jyw", mongo.GetSection("Jyw").Value},
-                                {"Log", mongo.GetSection("Log").Value},
-                                
-                            };
+                            _mongo = ConfigurationRoot.GetSection("Mongo").Value;
                         }
                     }
                 }

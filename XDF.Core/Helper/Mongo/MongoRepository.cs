@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using XDF.Core.Helper.JsonConfig;
 using XDF.Core.Helper.Mongo.Base;
 using XDF.Core.Helper.Mongo.Extension;
 
@@ -20,11 +21,31 @@ namespace XDF.Core.Helper.Mongo
         #region 初始化
         private readonly MongoClient _mongoClient;
 
-        public MongoRepository(string connectionString)
+        protected MongoRepository()
         {
-            _mongoClient = new MongoClient(connectionString);
+            var connectionStr = JsonConfigHelper.GetAppMongoStr;
+            _mongoClient = new MongoClient(connectionStr);
         }
-
+        private static readonly object Lock = new object();
+        private static MongoRepository _instance;
+        public static MongoRepository Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    lock (Lock)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new MongoRepository();
+                        }
+                    }
+                }
+                return _instance;
+            }
+          
+        }
         static MongoRepository()
         {
             ConventionRegistry.Register("IgnoreExtraElements",

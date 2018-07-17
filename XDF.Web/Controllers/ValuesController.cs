@@ -35,18 +35,15 @@ namespace XDF.Web.Controllers
         [Route("TestMongo")]
         public ActionResult<User> TestMongo()
         {
-            var url = "";
-            var mongoRepository = new MongoRepository(url);
-
             var u = new User
             {
                 Name = "renfushuai",
                 BirthDateTime = new DateTime(1991, 2, 2),
                 Sex = 1
             };
-            var addresult = mongoRepository.Add(u);
+            var addresult = MongoRepository.Instance.Add(u);
 
-            User getResult = mongoRepository.Get<User>(a => a.Id == u.Id);
+            User getResult = MongoRepository.Instance.Get<User>(a => a.Id == u.Id);
             return getResult;
         }
         // GET api/values/5

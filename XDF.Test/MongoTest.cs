@@ -12,25 +12,18 @@ namespace XDF.Test
 
     public class MongoDbTest
     {
-        public MongoRepository MongoRepository;
+
         #region Add
-
-        public MongoDbTest()
-        {
-            var url = "mongodb://********:27017";
-            MongoRepository = new MongoRepository(url);
-        }
-
         [Fact]
         public void Add_Normal_True()
         {
-            var result = MongoRepository.Add(new User
+            var result = MongoRepository.Instance.Add(new User
             {
                 Age = 111,
                 Name = "chengongeee"
             });
 
-            var result2 = MongoRepository.Add(new User
+            var result2 = MongoRepository.Instance.Add(new User
             {
                 Age = 111,
                 Name = "chengong100"
@@ -52,7 +45,7 @@ namespace XDF.Test
                 Age = 111,
                 Name = "chengongeee"
             };
-            MongoRepository.Add(user);
+            MongoRepository.Instance.Add(user);
 
             user.Name = "updateName";
             user.NumList = new List<int>();
@@ -61,7 +54,7 @@ namespace XDF.Test
 
             user.AddressList = new List<string> { "123123", "asdsdf" };
 
-            var result = MongoRepository.Update(user);
+            var result = MongoRepository.Instance.Update(user);
 
             Assert.True(result);
         }
@@ -74,13 +67,13 @@ namespace XDF.Test
                 Age = 111,
                 Name = "chengongeee"
             };
-            MongoRepository.Add(user);
+            MongoRepository.Instance.Add(user);
 
             var qwe = new List<User> { new User { Id = "1231", Name = "aads" }, new User { Id = "123134", Name = "aads" } };
 
             var qwe2 = new List<string> { "123123", "asdsdf" };
 
-            var result = MongoRepository.Update<User>(a => a.Id == user.Id, a => new User { AddressList = new List<string> { "123123", "asdsdf" } });
+            var result = MongoRepository.Instance.Update<User>(a => a.Id == user.Id, a => new User { AddressList = new List<string> { "123123", "asdsdf" } });
 
             Assert.True(result > 0);
         }
@@ -97,9 +90,9 @@ namespace XDF.Test
                 Age = 111,
                 Name = "chengongeee"
             };
-            MongoRepository.Add(user);
+            MongoRepository.Instance.Add(user);
 
-            var result = MongoRepository.Delete(user);
+            var result = MongoRepository.Instance.Delete(user);
 
             Assert.True(result);
         }
@@ -112,9 +105,9 @@ namespace XDF.Test
                 Age = 111,
                 Name = "chengongeee"
             };
-            MongoRepository.Add(user);
+            MongoRepository.Instance.Add(user);
 
-            var result = MongoRepository.Delete<User>(a => a.Id == user.Id);
+            var result = MongoRepository.Instance.Delete<User>(a => a.Id == user.Id);
 
             Assert.True(result > 0);
         }
@@ -125,7 +118,7 @@ namespace XDF.Test
         [Fact]
         public void Get_Normal_True()
         {
-            var skychen = MongoRepository.Get<User>(a => true);
+            var skychen = MongoRepository.Instance.Get<User>(a => true);
 
             Assert.NotNull(skychen);
         }
@@ -133,7 +126,7 @@ namespace XDF.Test
         [Fact]
         public void Get_Selector_True()
         {
-            var skychenName = MongoRepository.Get<User, string>(a => true, a => a.Name);
+            var skychenName = MongoRepository.Instance.Get<User, string>(a => true, a => a.Name);
 
             Assert.NotNull(skychenName);
         }
@@ -141,7 +134,7 @@ namespace XDF.Test
         [Fact]
         public void Get_OrderBy_True()
         {
-            var skychenName = MongoRepository.Get<User>(a => true, a => a.Desc(b => b.Age));
+            var skychenName = MongoRepository.Instance.Get<User>(a => true, a => a.Desc(b => b.Age));
 
             Assert.NotNull(skychenName);
         }
@@ -149,7 +142,7 @@ namespace XDF.Test
         [Fact]
         public void Get_SelectorOrderBy_True()
         {
-            var skychenName = MongoRepository.Get<User, User>(a => true, a => new User { Name = a.Name, Sex = a.Sex }, a => a.Desc(b => b.Age));
+            var skychenName = MongoRepository.Instance.Get<User, User>(a => true, a => new User { Name = a.Name, Sex = a.Sex }, a => a.Desc(b => b.Age));
 
             Assert.NotNull(skychenName.Name);
         }
@@ -159,7 +152,7 @@ namespace XDF.Test
         [Fact]
         public void ToList_Normal_True()
         {
-            var skychen = MongoRepository.Filter<User>(a => a.Name== "updateName");
+            var skychen = MongoRepository.Instance.Filter<User>(a => a.Name== "updateName");
 
             Assert.True(skychen.Any());
         }
@@ -167,7 +160,7 @@ namespace XDF.Test
         [Fact]
         public void ToList_Top_True()
         {
-            var skychen = MongoRepository.Filter<User>(a => true, 10);
+            var skychen = MongoRepository.Instance.Filter<User>(a => true, 10);
 
             Assert.Equal(skychen.Count, 10);
         }
@@ -175,7 +168,7 @@ namespace XDF.Test
         [Fact]
         public void ToList_Orderby_True()
         {
-            var skychen = MongoRepository.Filter<User>(a => true, a => a.Desc(b => b.Age).Desc(b => b.Sex), 10);
+            var skychen = MongoRepository.Instance.Filter<User>(a => true, a => a.Desc(b => b.Age).Desc(b => b.Sex), 10);
 
             Assert.Equal(skychen.Count, 10);
         }
@@ -183,7 +176,7 @@ namespace XDF.Test
         [Fact]
         public void ToList_Selector_True()
         {
-            var skychen = MongoRepository.ToList<User, string>(a => true, a => a.Name);
+            var skychen = MongoRepository.Instance.ToList<User, string>(a => true, a => a.Name);
 
             Assert.True(skychen.Any());
         }
@@ -191,7 +184,7 @@ namespace XDF.Test
         [Fact]
         public void ToList_Selector_Orderby_True()
         {
-            var skychen = MongoRepository.ToList<User, string>(a => true, a => a.Name, a => a.Desc(b => b.Name));
+            var skychen = MongoRepository.Instance.ToList<User, string>(a => true, a => a.Name, a => a.Desc(b => b.Name));
 
             Assert.True(skychen.Any());
         }
@@ -199,7 +192,7 @@ namespace XDF.Test
         [Fact]
         public void ToList_Selector_Orderby_Top_True()
         {
-            var skychen = MongoRepository.ToList<User, string>(a => true, a => a.Name, a => a.Desc(b => b.Name), 100);
+            var skychen = MongoRepository.Instance.ToList<User, string>(a => true, a => a.Name, a => a.Desc(b => b.Name), 100);
 
             Assert.True(skychen.Any());
         }
@@ -210,7 +203,7 @@ namespace XDF.Test
         [Fact]
         public void PageList_Normal_True()
         {
-            var skychen = MongoRepository.PageList<User>(a => true, 1, 10);
+            var skychen = MongoRepository.Instance.PageList<User>(a => true, 1, 10);
 
             Assert.Equal(10, skychen.Items.Count);
             Assert.Equal(true, skychen.HasNext);
@@ -220,7 +213,7 @@ namespace XDF.Test
         [Fact]
         public void PageList_Orderby_True()
         {
-            var skychen = MongoRepository.PageList<User>(a => true, a => a.Desc(b => b.Name), 2, 10);
+            var skychen = MongoRepository.Instance.PageList<User>(a => true, a => a.Desc(b => b.Name), 2, 10);
 
             Assert.Equal(skychen.Items.Count, 10);
             Assert.Equal(skychen.HasNext, true);
@@ -230,7 +223,7 @@ namespace XDF.Test
         [Fact]
         public void PageList_Selector_True()
         {
-            var skychen = MongoRepository.PageList<User, string>(a => true, a => a.Name, 2, 10);
+            var skychen = MongoRepository.Instance.PageList<User, string>(a => true, a => a.Name, 2, 10);
 
             Assert.Equal(skychen.Items.Count, 10);
             Assert.Equal(skychen.HasNext, true);
@@ -240,7 +233,7 @@ namespace XDF.Test
         [Fact]
         public void PageList_Selector_OrderBy_True()
         {
-            var skychen = MongoRepository.PageList<User, string>(a => true, a => a.Name, a => a.Desc(b => b.Name), 2, 20);
+            var skychen = MongoRepository.Instance.PageList<User, string>(a => true, a => a.Name, a => a.Desc(b => b.Name), 2, 20);
 
             Assert.Equal(skychen.Items.Count, 20);
             Assert.Equal(skychen.HasNext, true);
@@ -254,7 +247,7 @@ namespace XDF.Test
         [Fact]
         public void Exists_Normal_True()
         {
-            var isExist = MongoRepository.Exists<User>(a => a.Name == "chengongeee");
+            var isExist = MongoRepository.Instance.Exists<User>(a => a.Name == "chengongeee");
 
             Assert.True(isExist);
         }
@@ -262,7 +255,7 @@ namespace XDF.Test
         [Fact]
         public void Exists_Normal_IsFalse()
         {
-            var isExist = MongoRepository.Exists<User>(a => a.Name == "chengong100");
+            var isExist = MongoRepository.Instance.Exists<User>(a => a.Name == "chengong100");
 
             Assert.False(isExist);
         }
@@ -274,7 +267,7 @@ namespace XDF.Test
         [Fact]
         public void AddIfNotExist_Normal_True()
         {
-            var result = MongoRepository.AddIfNotExist("chenggongUpdateTest", "UserInfo", new User
+            var result = MongoRepository.Instance.AddIfNotExist("chenggongUpdateTest", "UserInfo", new User
             {
                 Age = 2222,
                 Name = "chengongeee2222"
