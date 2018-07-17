@@ -169,7 +169,7 @@ namespace XDF.Core.Helper.Mongo
         {
             var coll = GetCollection<T>(database, collection);
 
-            if (coll.Count(predicate) > 0)
+            if (coll.CountDocuments(predicate) > 0)
                 return false;
 
             coll.InsertOne(entity);
@@ -852,7 +852,7 @@ namespace XDF.Core.Helper.Mongo
         /// <param name="sort"></param>
         /// <param name="top"></param>
         /// <returns></returns>
-        public List<T> ToList<T>(Expression<Func<T, bool>> predicate, Func<Sort<T>, Sort<T>> sort, int? top) where T : MongoEntity
+        public List<T> Filter<T>(Expression<Func<T, bool>> predicate, Func<Sort<T>, Sort<T>> sort, int? top) where T : MongoEntity
         {
             var mongoAttribute = GetMongoAttribute<T>();
 
@@ -865,9 +865,9 @@ namespace XDF.Core.Helper.Mongo
         /// <param name="predicate"></param>
         /// <param name="top"></param>
         /// <returns></returns>
-        public List<T> ToList<T>(Expression<Func<T, bool>> predicate, int top) where T : MongoEntity
+        public List<T> Filter<T>(Expression<Func<T, bool>> predicate, int top) where T : MongoEntity
         {
-            return ToList(predicate, null, top);
+            return Filter(predicate, null, top);
         }
 
         /// <summary>
@@ -875,9 +875,9 @@ namespace XDF.Core.Helper.Mongo
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public List<T> ToList<T>(Expression<Func<T, bool>> predicate) where T : MongoEntity
+        public List<T> Filter<T>(Expression<Func<T, bool>> predicate) where T : MongoEntity
         {
-            return ToList(predicate, null, null);
+            return Filter(predicate, null, null);
         }
 
         #endregion
