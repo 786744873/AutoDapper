@@ -8,7 +8,7 @@ namespace XDF.Test
     {
         public string Name { get; set; }
         public int Age { get; set; }
-       
+        [JsonIgnore]
         public DateTime Birthday { get; set; }
     }
     public class UnitTest1
