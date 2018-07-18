@@ -6,7 +6,7 @@ namespace XDF.Service
     /// <summary>
     /// 
     /// </summary>    
-    public partial class ConfigService : SqlServerBaseService<ConfigEntity>
+    public partial class ConfigService :BaseService<ConfigEntity>
     {
         private readonly ConfigDao _ConfigDao;
         public ConfigService()

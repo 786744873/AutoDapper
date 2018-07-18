@@ -5,15 +5,17 @@ using XDF.Core.Helper.Ext;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 namespace XDF.Core.Helper.JsonConfig
+
 {
     public class JsonConfigHelper
     {
         private static Dictionary<string, string> _mySqlconnection;
         private static Dictionary<string, string> _sqlServerconnection;
         private static Dictionary<string, string> _apiurl;
+        private static DbConnectionConfig _dBConnectionConfig;
         private static string _mongo;
         private static string _redisStr;
-   
+
         private static string _taskStr;
         /// <summary>
         /// app环境
@@ -29,14 +31,19 @@ namespace XDF.Core.Helper.JsonConfig
         {
             get
             {
-                if(_configurationRoot == null) {
-                    lock (Lock) {
-                        if(_configurationRoot == null) {
+                if (_configurationRoot == null)
+                {
+                    lock (Lock)
+                    {
+                        if (_configurationRoot == null)
+                        {
                             var baseDir = AppContext.BaseDirectory;
-                            if(!File.Exists(baseDir + "/Config/appsettings.json")) {
+                            if (!File.Exists(baseDir + "/Config/appsettings.json"))
+                            {
                                 var di = new DirectoryInfo(string.Format("{0}../../../", baseDir));
                                 baseDir = di.FullName;
-                                if(!File.Exists(baseDir + "/Config/appsettings.json")) {
+                                if (!File.Exists(baseDir + "/Config/appsettings.json"))
+                                {
                                     throw new Exception("没有找到配置文件");
                                 }
                             }
@@ -55,13 +62,38 @@ namespace XDF.Core.Helper.JsonConfig
         /// <summary>
         ///     取得数据库链接配置
         /// </summary>
+        public static DbConnectionConfig GetDbConnectionStr(string dbName)
+        {
+            if (_dBConnectionConfig == null)
+            {
+                lock (Lock)
+                {
+                    if (_dBConnectionConfig == null)
+                    {
+                        var conn = ConfigurationRoot.GetSection(dbName);
+                        _dBConnectionConfig = new DbConnectionConfig()
+                        {
+                            ConnectionString = conn.GetSection("connectionstring").Value,
+                            Type =Enum.Parse<DbType>(conn.GetSection("type").Value.ToLower()) 
+                        };
+                    }
+                }
+            }
+            return _dBConnectionConfig;
+        }
+        /// <summary>
+        ///     取得数据库链接配置
+        /// </summary>
         public static Dictionary<string, string> GetMySqlConnectionStr
         {
             get
             {
-                if(_mySqlconnection == null) {
-                    lock (Lock) {
-                        if(_mySqlconnection == null) {
+                if (_mySqlconnection == null)
+                {
+                    lock (Lock)
+                    {
+                        if (_mySqlconnection == null)
+                        {
                             var conn = ConfigurationRoot.GetSection("MySql");
                             _mySqlconnection = new Dictionary<string, string>
                             {
@@ -105,9 +137,12 @@ namespace XDF.Core.Helper.JsonConfig
         {
             get
             {
-                if(_apiurl == null) {
-                    lock (Lock) {
-                        if(_apiurl == null) {
+                if (_apiurl == null)
+                {
+                    lock (Lock)
+                    {
+                        if (_apiurl == null)
+                        {
                             var conn = ConfigurationRoot.GetSection("ApiUrl");
                             _apiurl = new Dictionary<string, string>
                             {
@@ -123,9 +158,12 @@ namespace XDF.Core.Helper.JsonConfig
         {
             get
             {
-                if(_redisStr.IsStringEmpty()) {
-                    lock (Lock) {
-                        if(_redisStr.IsStringEmpty()) {
+                if (_redisStr.IsStringEmpty())
+                {
+                    lock (Lock)
+                    {
+                        if (_redisStr.IsStringEmpty())
+                        {
                             _redisStr = ConfigurationRoot.GetSection("Redis").Value;
                         }
                     }
@@ -137,9 +175,12 @@ namespace XDF.Core.Helper.JsonConfig
         {
             get
             {
-                if(_mongo==null) {
-                    lock (Lock) {
-                        if(_mongo == null) {
+                if (_mongo == null)
+                {
+                    lock (Lock)
+                    {
+                        if (_mongo == null)
+                        {
                             _mongo = ConfigurationRoot.GetSection("Mongo").Value;
                         }
                     }
@@ -151,9 +192,12 @@ namespace XDF.Core.Helper.JsonConfig
         {
             get
             {
-                if(_taskStr.IsStringEmpty()) {
-                    lock (Lock) {
-                        if(_taskStr.IsStringEmpty()) {
+                if (_taskStr.IsStringEmpty())
+                {
+                    lock (Lock)
+                    {
+                        if (_taskStr.IsStringEmpty())
+                        {
                             _taskStr = ConfigurationRoot.GetSection("Task").Value;
                         }
                     }
@@ -165,7 +209,7 @@ namespace XDF.Core.Helper.JsonConfig
         {
             get
             {
-                if (_environment==null)
+                if (_environment == null)
                 {
                     lock (Lock)
                     {
@@ -175,7 +219,7 @@ namespace XDF.Core.Helper.JsonConfig
                         }
                     }
                 }
-                return _environment=="release";
+                return _environment == "release";
             }
         }
         public static string GetSmsChannel
