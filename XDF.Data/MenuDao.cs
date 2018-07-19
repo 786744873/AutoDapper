@@ -7,7 +7,7 @@ namespace XDF.Data
     /// <summary>
     /// Dao
     /// </summary>
-    public partial class MenuDao : MySqlBaseDao<MenuEntity>
+    public partial class MenuDao : BaseDao<MenuEntity>
     {
         public MenuDao() : base("YSKJ")
         {

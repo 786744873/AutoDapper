@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using XDF.Core.Helper.Redis;
 using XDF.Core.Model;
@@ -7,23 +9,24 @@ using XDF.Data;
 
 namespace XDF.Service
 {
-    public  class MySqlBaseService<T> where T : class
+    public class BaseService<T> where T : class
     {
         public static readonly string Key = typeof(T).Name;
-        public MySqlBaseDao<T> BaseCrudDao = null;
+        public BaseDao<T> BaseCrudDao = null;
         #region CRUD
         public virtual T Find(object id)
         {
             return BaseCrudDao.Find(id);
         }
-        public virtual  T  FindByCode(object code,bool isUseCache=true)
+        public virtual T FindByCode(object code, bool isUseCache = true)
         {
             T entity = null;
-            if(!isUseCache) {
+            if (!isUseCache)
+            {
                 return BaseCrudDao.Find("Code=@Code", new { code });
             }
             var key = Key + "_Code";
-             entity = RedisHelper.InstanceRedis.HashGet<T>(key, code.ToString());
+            entity = RedisHelper.InstanceRedis.HashGet<T>(key, code.ToString());
             if (entity == null)
             {
                 entity = Find("Code=@Code", new { code });
@@ -46,7 +49,7 @@ namespace XDF.Service
         {
             return BaseCrudDao.Filter();
         }
-        public virtual PageListModel<TType> Filter<TType>(PageListModel<TType> info)
+        public virtual PageListModel<T> Filter(PageListModel<T> info)
         {
             return BaseCrudDao.Filter(info);
         }
@@ -62,10 +65,7 @@ namespace XDF.Service
         {
             return BaseCrudDao.Filter(where, par, order, field);
         }
-        public virtual List<T> Filter(string where, object par,int limit, string order, string field = "*")
-        {
-            return BaseCrudDao.Filter(where, par, limit,order, field);
-        }
+
         public virtual int Del(object id)
         {
             return BaseCrudDao.Del(id);
@@ -74,25 +74,21 @@ namespace XDF.Service
         {
             return BaseCrudDao.Del(where, par);
         }
-        public virtual TKey Insert<TKey>(T info)
+        public virtual int Insert(T info)
         {
-            return BaseCrudDao.Insert<TKey>(info);
-        }
-        public virtual int Add(T info)
-        {
-            return BaseCrudDao.Add(info);
+            return BaseCrudDao.Insert(info);
         }
         public virtual int Edit(T info)
         {
             return BaseCrudDao.Edit(info);
         }
-        public virtual int Edit(string val, object par)
+        public int Edit(string where, string val, object par)
         {
-            return BaseCrudDao.Edit(val, par);
+            return BaseCrudDao.Edit(where, val, par);
         }
-        public virtual TKey Count<TKey>(string where, object par)
+        public virtual int Count(string where, object par)
         {
-            return BaseCrudDao.Count<TKey>(where, par);
+            return BaseCrudDao.Count(where, par);
         }
         /// <summary>
         ///     返回查询第一行第一列
@@ -115,7 +111,7 @@ namespace XDF.Service
         {
             return BaseCrudDao.FindAsync(where, par, field);
         }
-        public virtual Task<IEnumerable<T>> FilterAsync()
+        public virtual System.Threading.Tasks.Task<IEnumerable<T>> FilterAsync()
         {
             return BaseCrudDao.FilterAsync();
         }
@@ -139,7 +135,7 @@ namespace XDF.Service
         {
             return await BaseCrudDao.InsertAsync<TType>(info);
         }
-        public virtual async  Task<int> EditAsync(T info)
+        public virtual async Task<int> EditAsync(T info)
         {
             return await BaseCrudDao.EditAsync(info);
         }
@@ -154,10 +150,10 @@ namespace XDF.Service
         #endregion
         #region  cache
 
-        public virtual int Edit(T info,object id)
+        public virtual int Edit(T info, object id)
         {
             RemoveCache(id);
-            var ids= BaseCrudDao.Edit(info);
+            var ids = BaseCrudDao.Edit(info);
             RemoveCache(id);
             return ids;
         }
@@ -168,10 +164,10 @@ namespace XDF.Service
         /// <param name="par"></param>
         /// <param name="id">移除缓存ID</param>
         /// <returns></returns>
-        public virtual int Edit(string val, object par,object id)
+        public virtual int Edit(string val, object par, object id)
         {
             RemoveCache(id);
-            var ids= BaseCrudDao.Edit(val, par);
+            var ids = BaseCrudDao.Edit(val, par);
             RemoveCache(id);
             return ids;
         }
@@ -179,9 +175,11 @@ namespace XDF.Service
         {
             var key = Key + "_Id";
             var entity = RedisHelper.InstanceRedis.HashGet<T>(key, id.ToString());
-            if (entity == null) {
+            if (entity == null)
+            {
                 entity = Find(id);
-                if (entity != null) {
+                if (entity != null)
+                {
                     RedisHelper.InstanceRedis.HashSet(key, id.ToString(), entity);
                 }
             }
@@ -192,17 +190,18 @@ namespace XDF.Service
             var entity = RedisHelper.InstanceRedis.StringGet<List<T>>(Key + "_List");
             if (entity != null && entity.Any()) return entity;
             entity = Filter();
-            if (entity != null) {
-                RedisHelper.InstanceRedis.StringSet(Key+"_List", entity,60);
+            if (entity != null)
+            {
+                RedisHelper.InstanceRedis.StringSet(Key + "_List", entity, 60);
             }
             return entity;
         }
         public virtual void RemoveCache(object id)
         {
             var key = Key + "_Id";
-            RedisHelper.InstanceRedis.HashDelete(Key+"_Code", id.ToString());
+            RedisHelper.InstanceRedis.HashDelete(Key + "_Code", id.ToString());
             RedisHelper.InstanceRedis.HashDelete(key, id.ToString());
-             RedisHelper.InstanceRedis.KeyDelete(Key + "_List");
+            RedisHelper.InstanceRedis.KeyDelete(Key + "_List");
         }
         public virtual void RemoveCachByList()
         {

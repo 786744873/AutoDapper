@@ -14,17 +14,17 @@ using DbType = XDF.Core.Helper.JsonConfig.DbType;
 
 namespace XDF.Core.Helper.Db
 {
-    public  class DapperHelper: IDisposable
+    public class DapperHelper : IDisposable
     {
-        public DbConnectionConfig ConnectionConfig { get; set; }
-        private string _DbName;
-        public IDbConnection Db {
-            
+        public DbConnectionConfig ConnectionConfig => JsonConfigHelper.GetDbConnectionStr(_DbName);
+
+        private readonly string _DbName;
+        public IDbConnection Db
+        {
+
             get
             {
-              
-                ConnectionConfig = JsonConfigHelper.GetDbConnectionStr(_DbName);
-                if (ConnectionConfig.Type== DbType.sqlserver)
+                if (ConnectionConfig.Type == DbType.sqlserver)
                 {
                     return new SqlConnection(ConnectionConfig.ConnectionString);
                 }
@@ -34,7 +34,7 @@ namespace XDF.Core.Helper.Db
         public DapperHelper(string dbName)
         {
             _DbName = dbName;
-            
+
         }
         public void Dispose()
         {
@@ -193,7 +193,8 @@ namespace XDF.Core.Helper.Db
                 if (info.IsPage)
                 {
                     info.PageCount = info.PageSize == 0 ? 0 : Math.Ceiling(info.Count.ToDecimal() / info.PageSize.ToDecimal()).ToInt();
-                    sql.Append(" OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY ");
+
+                    sql.Append(ConnectionConfig.Type == DbType.sqlserver ? " OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY " : " limit @Offset,@Limit");
                     if (info.Offset.ToInt() <= 0)
                     {
                         info.Offset = (info.PageIndex - 1) * info.PageSize;

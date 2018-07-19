@@ -6,7 +6,7 @@ namespace XDF.Data
     /// <summary>
     /// UserDao
     /// </summary>
-    public partial class UserDao : MySqlBaseDao<UserEntity>
+    public partial class UserDao : BaseDao<UserEntity>
     {
         public UserDao() : base("YSKJ")
         {

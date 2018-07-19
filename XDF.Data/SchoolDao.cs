@@ -8,7 +8,7 @@ namespace XDF.Data
     /// <summary>
     /// Dao
     /// </summary>
-    public partial class SchoolDao : SqlServerBaseDao<SchoolEntity>
+    public partial class SchoolDao : BaseDao<SchoolEntity>
     {
         public SchoolDao() : base("XDF")
         {

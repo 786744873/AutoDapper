@@ -6,7 +6,7 @@ namespace XDF.Service
     /// <summary>
     /// 
     /// </summary>    
-    public partial class AreaNewService : SqlServerBaseService<AreaNewEntity>
+    public partial class AreaNewService : BaseService<AreaNewEntity>
     {
         private readonly AreaNewDao _AreaNewDao;
         public AreaNewService()

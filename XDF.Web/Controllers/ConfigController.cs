@@ -34,7 +34,7 @@ namespace XDF.Web.Controllers
         [HttpPost]
         public AjaxResultModel<string> Post([FromBody]ConfigEntity model)
         {
-            if (ConfigService.Instance.Count<int>("SName=@SName",new {model.SName })>0)
+            if (ConfigService.Instance.Count("SName=@SName",new {model.SName })>0)
             {
                 return AjaxResult.Error("已存在相同的Key");
             }

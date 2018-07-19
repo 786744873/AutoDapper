@@ -8,7 +8,7 @@ namespace XDF.Core.Helper.Mongo.Base
     /// 分页实体类
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PageList<T>
+    public class MongoPageList<T>
     {
         /// <summary>
         /// 
@@ -17,7 +17,7 @@ namespace XDF.Core.Helper.Mongo.Base
         /// <param name="pageSize">页项</param>
         /// <param name="totalCount">总数</param>
         /// <param name="items">元素</param>
-        public PageList(int pageIndex, int pageSize, int totalCount, List<T> items)
+        public MongoPageList(int pageIndex, int pageSize, int totalCount, List<T> items)
         {
             Total = totalCount;
             PageSize = pageSize;

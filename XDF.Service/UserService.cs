@@ -7,7 +7,7 @@ namespace XDF.Service
     /// <summary>
     /// UserService
     /// </summary>
-    public partial class UserService : MySqlBaseService<UserEntity>
+    public partial class UserService : BaseService<UserEntity>
     {
         public readonly UserDao _Userdao = null;
         public UserService()

@@ -8,7 +8,7 @@ namespace XDF.Data
     /// <summary>
     /// FunctionDao
     /// </summary>
-    public partial class FunctionDao : MySqlBaseDao<FunctionEntity>
+    public partial class FunctionDao : BaseDao<FunctionEntity>
     {
         public FunctionDao() : base("YSKJ")
         {

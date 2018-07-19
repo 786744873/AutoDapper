@@ -8,7 +8,7 @@ namespace XDF.Data
     /// <summary>
     /// Dao
     /// </summary>
-    public partial class EmployeeDao : SqlServerBaseDao<EmployeeEntity>
+    public partial class EmployeeDao : BaseDao<EmployeeEntity>
     {
         public EmployeeDao() : base("XDF")
         {

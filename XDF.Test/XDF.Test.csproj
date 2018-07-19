@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\XDF.Core\XDF.Core.csproj" />
+    <ProjectReference Include="..\XDF.Service\XDF.Service.csproj" />
   </ItemGroup>
 
 </Project>

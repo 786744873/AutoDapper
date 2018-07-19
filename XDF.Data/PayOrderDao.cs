@@ -5,7 +5,7 @@ using XDF.Core.Entity;
 
 namespace XDF.Data
 {
-    public partial class PayOrderDao : SqlServerBaseDao<PayOrderEntity>
+    public partial class PayOrderDao : BaseDao<PayOrderEntity>
     {
         public PayOrderDao() : base("XDF")
         {

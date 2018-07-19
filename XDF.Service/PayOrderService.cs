@@ -6,7 +6,7 @@ using XDF.Data;
 
 namespace XDF.Service
 {
-    public partial class PayOrderService : SqlServerBaseService<PayOrderEntity>
+    public partial class PayOrderService : BaseService<PayOrderEntity>
     {
         private readonly PayOrderDao _PayOrderDao;
         public PayOrderService()

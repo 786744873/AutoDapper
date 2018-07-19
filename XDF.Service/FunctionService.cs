@@ -9,7 +9,7 @@ namespace XDF.Service
     /// <summary>
     /// FunctionService
     /// </summary>
-    public partial class FunctionService : MySqlBaseService<FunctionEntity>
+    public partial class FunctionService : BaseService<FunctionEntity>
     {
         public readonly FunctionDao _Functiondao = null;
         public FunctionService()

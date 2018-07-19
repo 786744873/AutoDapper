@@ -6,7 +6,7 @@ using XDF.Data;
 
 namespace XDF.Service
 {
-    public partial class SchoolService : SqlServerBaseService<SchoolEntity>
+    public partial class SchoolService :BaseService<SchoolEntity>
     {
         private readonly SchoolDao _SchoolDao;
         public SchoolService()

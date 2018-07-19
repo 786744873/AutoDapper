@@ -966,7 +966,7 @@ namespace XDF.Core.Helper.Mongo
         /// <param name="database">库</param>
         /// <param name="selector">查询字段</param>
         /// <returns></returns>
-        public PageList<TResult> PageList<T, TResult>(string database, string collection, Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<Sort<T>, Sort<T>> sort, int pageIndex, int pageSize) where TResult : class
+        public MongoPageList<TResult> PageList<T, TResult>(string database, string collection, Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<Sort<T>, Sort<T>> sort, int pageIndex, int pageSize) where TResult : class
         {
             var coll = GetCollection<T>(database, collection);
 
@@ -981,7 +981,7 @@ namespace XDF.Core.Helper.Mongo
 
             var items = find.Project(selector).ToList();
 
-            return new PageList<TResult>(pageIndex, pageSize, count, items);
+            return new MongoPageList<TResult>(pageIndex, pageSize, count, items);
         }
 
         /// <summary>
@@ -995,7 +995,7 @@ namespace XDF.Core.Helper.Mongo
         /// <param name="pageIndex">页码</param>
         /// <param name="pageSize">页长</param>
         /// <returns></returns>
-        public PageList<TResult> PageList<T, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<Sort<T>, Sort<T>> sort, int pageIndex, int pageSize) where TResult : class
+        public MongoPageList<TResult> PageList<T, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, Func<Sort<T>, Sort<T>> sort, int pageIndex, int pageSize) where TResult : class
         {
             var mongoAttribute = GetMongoAttribute<T>();
 
@@ -1012,7 +1012,7 @@ namespace XDF.Core.Helper.Mongo
         /// <param name="pageIndex">页码</param>
         /// <param name="pageSize">页长</param>
         /// <returns></returns>
-        public PageList<TResult> PageList<T, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, int pageIndex, int pageSize) where TResult : class
+        public MongoPageList<TResult> PageList<T, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, int pageIndex, int pageSize) where TResult : class
         {
             return PageList(predicate, selector, null, pageIndex, pageSize);
         }
@@ -1024,7 +1024,7 @@ namespace XDF.Core.Helper.Mongo
         /// <param name="sort">排序字段</param>
         /// <param name="pageIndex">页码</param>
         /// <param name="pageSize">页长</param>
-        public PageList<T> PageList<T>(Expression<Func<T, bool>> predicate, Func<Sort<T>, Sort<T>> sort, int pageIndex, int pageSize) where T : MongoEntity
+        public MongoPageList<T> PageList<T>(Expression<Func<T, bool>> predicate, Func<Sort<T>, Sort<T>> sort, int pageIndex, int pageSize) where T : MongoEntity
         {
             return PageList(predicate, a => a, sort, pageIndex, pageSize);
         }
@@ -1035,7 +1035,7 @@ namespace XDF.Core.Helper.Mongo
         /// <param name="predicate">条件</param>
         /// <param name="pageIndex">页码</param>
         /// <param name="pageSize">页长</param>
-        public PageList<T> PageList<T>(Expression<Func<T, bool>> predicate, int pageIndex, int pageSize) where T : MongoEntity
+        public MongoPageList<T> PageList<T>(Expression<Func<T, bool>> predicate, int pageIndex, int pageSize) where T : MongoEntity
         {
             return PageList(predicate, null, pageIndex, pageSize);
         }
@@ -1055,7 +1055,7 @@ namespace XDF.Core.Helper.Mongo
         /// <param name="orderby">排序字段</param>
         /// <param name="desc">顺序、倒叙</param>
         /// <returns></returns>
-        public Task<PageList<T>> PageListAsync<T>(Expression<Func<T, bool>> predicate,
+        public Task<MongoPageList<T>> PageListAsync<T>(Expression<Func<T, bool>> predicate,
             Expression<Func<T, T>> projector = null,
             int pageIndex = 1, int pageSize = 20, Expression<Func<T, object>> orderby = null, bool desc = false) where T : MongoEntity
         {
@@ -1078,7 +1078,7 @@ namespace XDF.Core.Helper.Mongo
         /// <param name="orderby">排序字段</param>
         /// <param name="desc">顺序、倒叙</param>
         /// <returns></returns>
-        public async Task<PageList<T>> PageListAsync<T>(string database, string collection,
+        public async Task<MongoPageList<T>> PageListAsync<T>(string database, string collection,
             Expression<Func<T, bool>> predicate, Expression<Func<T, T>> projector, int pageIndex = 1, int pageSize = 20,
             Expression<Func<T, object>> orderby = null, bool desc = false) where T : MongoEntity
         {
@@ -1098,7 +1098,7 @@ namespace XDF.Core.Helper.Mongo
 
             var items = await find.ToListAsync();
 
-            return new PageList<T>(pageIndex, pageSize, count, items);
+            return new MongoPageList<T>(pageIndex, pageSize, count, items);
         }
 
         #endregion

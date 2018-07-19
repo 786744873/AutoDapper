@@ -8,7 +8,7 @@ namespace XDF.Service
     /// <summary>
     /// service
     /// </summary>
-    public partial class MenuService : MySqlBaseService<MenuEntity>
+    public partial class MenuService : BaseService<MenuEntity>
     {
         public readonly MenuDao _Menudao = null;
         public MenuService()

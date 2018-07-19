@@ -6,7 +6,7 @@ using XDF.Data;
 
 namespace XDF.Service
 {
-    public class EmployeeService:SqlServerBaseService<EmployeeEntity>
+    public class EmployeeService:BaseService<EmployeeEntity>
     {
         public readonly EmployeeDao _EmployeeDao = null;
         public EmployeeService()
