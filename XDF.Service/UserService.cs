@@ -9,7 +9,7 @@ namespace XDF.Service
     /// </summary>
     public partial class UserService : BaseService<UserEntity>
     {
-        public readonly UserDao _Userdao = null;
+        private readonly UserDao _Userdao = null;
         public UserService()
         {
             this._Userdao = new UserDao();
