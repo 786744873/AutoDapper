@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using XDF.Core.Helper.Ajax;
+using XDF.Core.Helper.Tools;
 
 namespace XDF.Web.Middleware
 {
@@ -59,6 +60,7 @@ namespace XDF.Web.Middleware
                 }
                 if (!_ex.IsStringEmpty())
                 {
+                    NLogHelper.Error(context.Request.Path+_ex);
                     //AppLogService.Instance.Error(_ex, context.Request.Path);
                 }
                 context.Response.ContentType = "application/json;charset=utf-8";

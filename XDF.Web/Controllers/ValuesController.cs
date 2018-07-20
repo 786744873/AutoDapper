@@ -50,12 +50,13 @@ namespace XDF.Web.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            var total = 200000;
+            var total = 20;
             var sw = new Stopwatch();
             sw.Start();
             for (int i = 0; i < total; i++)
             {
                 NLogHelper.Info("nlog bigdata test: " + i);
+                NLogHelper.Error("error test"+i);
             }
             sw.Stop();
             NLogHelper.Info($"total: {total}, Elapsed:{sw.ElapsedMilliseconds}");
