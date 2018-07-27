@@ -1,0 +1,176 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Description="Generates a single entity business class." Debug="True" %>
+<%-- Required Properties  --%>
+<%@ Property Name="Table" Type="TableSchema" Optional="False" DeepLoad="True" Category="Optional" Description="If true, the template will not output using and namespace statements." %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Property Name="库名" Type="System.String" %>
+using System;
+namespace Jyw.Core.Entity.<%=库名 %>
+{
+    /// <summary>
+    /// <%=Table.Description %>
+    /// </summary>
+    [Serializable]
+    public partial class <%=GetTableName() %>Entity
+    {
+        #region <%=Table.Description %>
+        <%foreach(var m in Table.Columns){%>
+        /// <summary>
+        /// <%=m.Description %>
+        /// </summary>
+        public <%=GetType(m.NativeType) %><%= m.AllowDBNull&&GetType(m.NativeType)!="string"?"?":"" %> <%=GetName(m.Name)%> { set; get; }<%=FiledDefaultValue(m) %>
+        <%}%>
+        #endregion
+    }
+}
+
+<script runat="template">
+
+       private string GetType(string type)
+        {
+            string flg="string";
+            switch(type)
+            {
+                case "varchar":
+                case "nvarchar":
+                case "ntext":
+                case "geography":
+                case "char":
+                    flg="string";
+                    break;
+                case "bigint":
+                    flg="long";
+                    break;
+                case "int":
+                    flg="int";
+                    break;
+                case "smallint":
+               
+                    flg="short";
+                    break;
+                case "decimal":
+                    flg="decimal";
+                    break;
+                case "bit":
+                    flg="bool";
+                    break;
+                case "datetime":
+                    flg="DateTime";
+                    break;
+                case "date":
+                    flg="DateTime";
+                    break;
+                case "float":
+                    flg="float";
+                    break;
+                case "tinyint":
+                    flg="byte";
+                    break;
+                case "time":
+                    flg="TimeSpan";
+                    break;
+                    case "double":
+                    flg="double";
+                    break;
+            }
+            return flg;
+        }
+        private string GetName(string v)
+        {
+            string a = v;
+            a=a.Substring(0, 1).ToUpper()+a.Substring(1);
+            return a;
+        }
+        private string GetPrivateName(string v)
+        {
+           return "_"+GetName(v).ToLower();
+        }
+       private string GetTableName()
+        {
+            string a = Table.Name.Remove(0,Table.Name.IndexOf("_")+1).Replace("_","");
+            a=a.Substring(0, 1).ToUpper()+a.Substring(1);
+            return a;
+        }
+        private string FiledDefaultValue(ColumnSchema cs)
+        {
+            if(cs.IsPrimaryKeyMember)return "";
+                string def=cs.ExtendedProperties["CS_Default"].Value.ToString().ToLower().Replace("(","").Replace(")","").Replace("'","");
+            
+               if(string.IsNullOrEmpty(def)) 
+               {  
+                   string v="";
+                   var dbType=GetType(cs.NativeType);
+                   if(cs.NativeType=="geography") return v="=\"POINT (0 0)\";";
+                   switch(dbType)
+                   {
+                        case "string":
+                           v=" = \"\";";
+                           break;
+                        case "DateTime":
+                           v=" = new DateTime(1970, 01, 01);";
+                           break;
+                        case "TimeSpan":
+                           v=" = new TimeSpan();";
+                           break;
+                        case "bool":
+                           v=" = false;";
+                           break;
+                        case "decimal":
+                           v=" = 0m;";
+                           break;
+                        default:
+                           v=" = 0;";
+                           break;
+                           
+                   }
+                   return v;
+               }  
+               else
+               {
+                   string v="";
+                   var dbType=GetType(cs.NativeType);
+                   switch(dbType)
+                   {
+                        case "string":
+                            v="\""+def+"\";";
+                            break;
+                        case "DateTime":
+                            if(def.IndexOf("current_timestamp")>=0)
+                            {
+                                v="DateTime.Now;";
+                            }
+                            else
+                            {
+                                v="Convert.ToDateTime(\""+def+"\");";
+                            }
+                           break;
+                        case "TimeSpan":
+                           string[] vals=def.Split(':');
+                           v=string.Format("new TimeSpan({0},{1},{2});",vals[0],vals[1],vals[2]);
+                           break;
+                        case "bool":
+                            if(def=="0")
+                            {
+                                v="false;";
+                            }
+                            else
+                            {
+                                v="true;";
+                            }
+                            break;
+                        case "decimal":
+                            v=def+"M;";
+                            break;
+                        case "float":
+                            v=def+"f;";
+                            break;
+                        default:
+                            v=""+def+";";
+                            break;
+                           
+                   }
+                 return  " = "+v;
+               }
+             
+        }
+</script>

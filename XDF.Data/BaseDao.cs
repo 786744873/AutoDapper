@@ -244,12 +244,12 @@ namespace XDF.Data
             var sql = "";
             if (dapperHelper.ConnectionConfig.Type == DbType.sqlserver)
             {
-                sql = $"SELECT TOP 1  {_Primary},{_Field} FROM {_Primary}=@{_Primary}";
+                sql = $"SELECT TOP 1  {_Primary},{_Field} FROM {_Table} WHERE {_Primary}=@{_Primary}";
             }
 
             if (dapperHelper.ConnectionConfig.Type == DbType.mysql)
             {
-                sql = $"SELECT  {_Primary},{_Field} FROM {_Primary}=@{_Primary} LIMIT 1";
+                sql = $"SELECT  {_Primary},{_Field} FROM {_Table} WHERE {_Primary}=@{_Primary} LIMIT 1";
             }
             var par = new DynamicParameters();
             par.Add("@" + _Primary, id);

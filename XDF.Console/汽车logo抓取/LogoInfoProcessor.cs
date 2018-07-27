@@ -15,7 +15,7 @@ namespace XDF.Console
             foreach (var logoInfo in logoInfoNodes)
             {
                 var model = new LogoInfoModel();
-                model.BrandName = logoInfo.XPath("./strong").GetValue();
+                model.BrandName = logoInfo.XPath("./span").GetValue();
                 model.ImgPath = logoInfo.XPath("./img/@src").GetValue();
                 if (model.ImgPath == null)
                 {

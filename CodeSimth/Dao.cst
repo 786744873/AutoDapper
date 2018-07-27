@@ -1,0 +1,180 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Description="Generates a single entity business class." Debug="True" %>
+
+<%-- Required Properties  --%>
+
+<%@ Property Name="Table" Type="TableSchema" Optional="False" DeepLoad="True" Category="Optional" Description="If true, the template will not output using and namespace statements." %>
+
+<%@ Property Name="库名" Type="System.String" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+
+
+<script runat="template">
+   private string GetTableName(string v)
+        {
+            string a = Table.Name.Remove(0,Table.Name.IndexOf("_")+1).Replace("_","");
+            a=a.Substring(0, 1).ToUpper()+a.Substring(1);
+            return a;
+        }
+</script>
+using Jyw.Core.Entity.<%=库名 %>;
+using Jyw.Data.MySql.Base;
+namespace Jyw.Data.MySql.<%=库名 %>
+{
+    /// <summary>
+    /// <%=Table.Description %>Dao
+    /// </summary>
+    public partial class <%=GetTableName(Table.Name)%>Dao : BaseCrudDao<<%=GetTableName(Table.Name)%>Entity> 
+    {
+        public <%=GetTableName(Table.Name)%>Dao() : base("<%=库名 %>")
+        {
+            base._Field = " <%= GetCol() %> ";
+            base._Primary = "<%=Table.PrimaryKey.MemberColumns[0].Name%>";
+            base._FieldAt = " <%= GetColp() %> ";
+            base._Table = " <%=Table.Name%> ";
+            base._FieldUp = " <%=GetColu()%> ";
+            base._IsIdentity = <%= Table.Columns.Find(c=>c.IsPrimaryKeyMember&&c.ExtendedProperties["CS_IsIdentity"].Value.ToString()=="False")==null?"true":"false"%>;//主建是否自增，如果不自增插入的时候要赋值
+        }
+    }
+}
+
+
+<script runat="template">
+ private string GetCol()
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in Table.Columns)
+            {
+                if(!m.IsPrimaryKeyMember)
+                {
+                     if(i>0)
+                {
+                    if(m.NativeType=="point"){
+                        sql+=",AsText("+m.Name+") as "+m.Name;
+                    }else{
+                        sql+=",`"+m.Name+"`";
+                    }
+                    
+                }
+                else
+                {
+                     if(m.NativeType=="point"){
+                         sql+="AsText("+m.Name+") as "+m.Name;
+                     }
+                     else{
+                          sql+="`"+m.Name+"`";
+                     }
+                    
+                }
+              
+               i++; 
+                }
+               
+            }
+            
+            return sql;
+        }
+         private string GetColAll()
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in Table.Columns)
+            {
+                
+                if(i>0)
+                {
+                    sql+=",["+m.Name+"]";
+                }
+                else
+                {
+                    sql+="["+m.Name+"]";
+                }
+                
+               i++; 
+            }
+            
+            return sql;
+        }
+         private string GetColp()
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in Table.Columns)
+            {
+                if(!m.IsPrimaryKeyMember)
+                {
+                    
+                  if(i>0)
+                {
+                    if(m.NativeType=="point")
+                    {
+                       sql+=",GeomFromText(@"+m.Name+")";
+                    }
+                    else
+                    {
+                        sql+=",@"+m.Name;
+                    }
+                    
+                }
+                else
+                {
+                    if(m.NativeType=="point")
+                    {
+                       sql+="GeomFromText(@"+m.Name+")";
+                    }
+                    else
+                    {
+                        sql+="@"+m.Name;
+                    }
+                }
+                
+               i++; 
+                }
+             
+            }
+            
+            return sql;
+        }
+        
+             private string GetColu()
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in Table.Columns)
+            {
+                if(!m.IsPrimaryKeyMember)
+                {
+                     if(i>0)
+                {
+                    if(m.NativeType=="geography")
+                    {
+                       sql+=",`"+m.Name+"`=geography::STGeomFromText(@"+m.Name+", 4326)";
+                    }
+                    else
+                    {
+                        sql+=",`"+m.Name+"`=@"+m.Name;
+                    }
+                    
+                }
+                else
+                {
+                     if(m.NativeType=="geography")
+                    {
+                       sql+="`"+m.Name+"`=geography::STGeomFromText(@"+m.Name+", 4326)";
+                    }
+                    else
+                    {
+                        sql+="`"+m.Name+"`=@"+m.Name;
+                    }
+                    
+                }
+                
+               i++; 
+                }
+               
+            }
+            
+            return sql;
+        }
+</script>

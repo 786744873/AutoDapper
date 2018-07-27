@@ -1,0 +1,90 @@
+﻿<%-- 
+Name:
+Author: 
+Description: 
+--%>
+<%@ Template Language="C#" TargetLanguage="Text" %>
+<%@ Property Name="SampleStringProperty" Default="SomeValue" Type="System.String" %>
+<%@ Property Name="SampleBooleanProperty" Default="True" Type="System.Boolean" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Property Name="库名" Type="System.String" %>
+<%@ Property Name="Table" Type="TableSchema" Optional="False" DeepLoad="True" Category="Optional" Description="If true, the template will not output using and namespace statements." %>
+
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Jyw.Core.Model;
+using Jyw.Core.Entity.<%=库名%>;
+using Jyw.Core.Helper.Ajax;
+using Jyw.Service.Base.<%=库名%>;
+using Jyw.Web.Framework.Controllers;
+
+namespace Jyw.Web.<%=库名%>.Controllers
+{
+   [Route("api/<%=库名%>/[controller]")]
+     public class <%= GetTableName() %>Controller : BaseOperateController
+    {
+        [HttpGet]
+        public PageListModel<<%= GetTableName() %>Entity> Get(PageListModel<<%= GetTableName() %>Entity> info)
+        {
+            return <%= GetTableName() %>Service.Instance.Filter(info);
+        }
+        [HttpGet("{id}")]
+        public <%= GetTableName() %>Entity Get(long id)
+        {
+            return <%= GetTableName() %>Service.Instance.Find(id);
+        }
+        [HttpPut]
+        public AjaxResultModel<string> Put(<%= GetTableName() %>Entity entity)
+        {
+            var <%= GetTableName() %>Entity = <%= GetTableName() %>Service.Instance.Find(entity.Id);
+            if (<%= GetTableName() %>Entity == null)
+            {
+                return AjaxResult.Error("没有记录");
+            }
+            TryUpdateModelAsync(<%= GetTableName() %>Entity);
+            <%= GetTableName() %>Service.Instance.Edit(<%= GetTableName() %>Entity);
+            return AjaxResult.Success("修改成功");
+        }
+        [HttpPost]
+        public AjaxResultModel<string> Post(<%= GetTableName() %>Entity entity)
+        {
+            <%= GetTableName() %>Service.Instance.Insert<int>(entity);
+            return AjaxResult.Success("添加成功");
+        }
+        [HttpDelete("{id}")]
+        public AjaxResultModel<string> Delete(int id)
+        {
+            <%= GetTableName() %>Service.Instance.Del(id);
+            return AjaxResult.Success("删除成功");
+        }
+        [HttpDelete]
+        public void BatchDel(string ids)
+        {
+            ids.Split(',').ToList().ForEach(m =>
+            {
+                <%= GetTableName() %>Service.Instance.Del(m);
+            });
+        }
+    }
+}
+
+<script runat="template">
+ private string GetTableName()
+        {
+            string a = Table.Name.Remove(0,Table.Name.IndexOf("_")+1).Replace("_","");
+            a=a.Substring(0, 1).ToUpper()+a.Substring(1);
+            return a;
+        }
+</script>
+
+     
+
+
+
+
+
+
+
+
+

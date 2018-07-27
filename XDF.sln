@@ -17,6 +17,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XDF.Test", "XDF.Test\XDF.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XDF.WinForm", "XDF.WinForm\XDF.WinForm.csproj", "{C8C80BC7-852C-4557-AA6C-0DA3E6FF102F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XDF.MQSend", "XDF.MQSend\XDF.MQSend.csproj", "{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XDF.MQReceive", "XDF.MQReceive\XDF.MQReceive.csproj", "{27592E3C-B38B-49A9-9EB3-3D31D185C50A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RabbitMQ", "RabbitMQ", "{8ADDCCFC-5BA8-43BC-AA39-9A71CC9DA0F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeSmith", "CodeSmith", "{78976160-CE51-430F-8A78-CFD765B9A254}"
+	ProjectSection(SolutionItems) = preProject
+		CodeSimth\controller.cst = CodeSimth\controller.cst
+		CodeSimth\Dao.cst = CodeSimth\Dao.cst
+		CodeSimth\DataBase.cst = CodeSimth\DataBase.cst
+		CodeSimth\Entity.cst = CodeSimth\Entity.cst
+		CodeSimth\Service.cst = CodeSimth\Service.cst
+		CodeSimth\Table.cst = CodeSimth\Table.cst
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,9 +97,29 @@ Global
 		{C8C80BC7-852C-4557-AA6C-0DA3E6FF102F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C8C80BC7-852C-4557-AA6C-0DA3E6FF102F}.Release|x64.ActiveCfg = Release|x64
 		{C8C80BC7-852C-4557-AA6C-0DA3E6FF102F}.Release|x64.Build.0 = Release|x64
+		{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF}.Debug|x64.Build.0 = Debug|Any CPU
+		{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF}.Release|x64.ActiveCfg = Release|Any CPU
+		{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF}.Release|x64.Build.0 = Release|Any CPU
+		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Debug|x64.Build.0 = Debug|Any CPU
+		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Release|x64.ActiveCfg = Release|Any CPU
+		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5AB12D63-82DE-4BF3-B283-35F1FBB2AADF} = {8ADDCCFC-5BA8-43BC-AA39-9A71CC9DA0F0}
+		{27592E3C-B38B-49A9-9EB3-3D31D185C50A} = {8ADDCCFC-5BA8-43BC-AA39-9A71CC9DA0F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6D2DAA99-4519-4879-97F0-353762A0BD79}

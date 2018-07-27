@@ -6,6 +6,8 @@ namespace XDF.Test
 {
     public class StudentInfo
     {
+        //自定义序列化的字段名称
+        [JsonProperty("CName")]
         public string Name { get; set; }
         public int Age { get; set; }
         [JsonIgnore]

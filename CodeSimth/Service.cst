@@ -1,0 +1,110 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Description="Generates a single entity business class." Debug="True" %>
+<%-- Required Properties  --%>
+<%@ Property Name="Table" Type="TableSchema" Optional="False" DeepLoad="True" Category="Optional" Description="If true, the template will not output using and namespace statements." %>
+<%@ Property Name="库名" Type="System.String" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+using Jyw.Core.Base;
+using Jyw.Core.Entity.<%=库名 %>;
+using Jyw.Data.MySql.<%=库名 %>;
+namespace Jyw.Service.Base.<%=库名 %>
+{
+    /// <summary>
+    /// <%=Table.Description %>
+    /// </summary>    
+    public partial class <%=GetTableName(Table.Name)%>Service : BaseService<<%=GetTableName(Table.Name)%>Entity>, IBaseService<<%=GetTableName(Table.Name)%>Entity>
+    {
+        private readonly <%=GetTableName(Table.Name)%>Dao _<%=GetTableName(Table.Name)%>Dao;
+        public <%=GetTableName(Table.Name)%>Service()
+        {
+             _<%=GetTableName(Table.Name)%>Dao = new <%=GetTableName(Table.Name)%>Dao();
+             BaseCrudDao = _<%=GetTableName(Table.Name)%>Dao;
+        }
+        private static <%=GetTableName(Table.Name)%>Service _instance= null;
+        private static readonly object Lock=new object();
+        public static <%=GetTableName(Table.Name)%>Service Instance
+        {
+            get
+            {
+                if(_instance == null) {
+                    lock (Lock) {
+                        if(_instance == null) {
+                            _instance=new <%=GetTableName(Table.Name)%>Service();
+                        }
+                    }
+                }
+                return _instance;
+            }
+        }
+    }
+}
+
+<script runat="template">
+ private string GetCol(TableSchema table)
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in table.Columns)
+            {
+                if(i>0)
+                {
+                    sql+=","+m.Name;
+                }
+                else
+                {
+                    sql+=m.Name;
+                }
+                
+               i++; 
+            }
+            
+            return sql;
+        }
+         private string GetColp(TableSchema table)
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in table.Columns)
+            {
+                if(i>0)
+                {
+                    sql+=",@"+m.Name;
+                }
+                else
+                {
+                    sql+="@"+m.Name;
+                }
+                
+               i++; 
+            }
+            
+            return sql;
+        }
+        
+             private string GetColu(TableSchema table)
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in table.Columns)
+            {
+                if(i>0)
+                {
+                    sql+=","+m.Name+"=@"+m.Name;
+                }
+                else
+                {
+                    sql+=m.Name+"=@"+m.Name;
+                }
+                
+               i++; 
+            }
+            
+            return sql;
+        }
+          private string GetTableName(string v)
+        {
+            string a = Table.Name.Remove(0,Table.Name.IndexOf("_")+1).Replace("_","");
+            a=a.Substring(0, 1).ToUpper()+a.Substring(1);
+            return a;
+        }
+</script>

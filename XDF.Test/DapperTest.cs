@@ -68,5 +68,10 @@ namespace XDF.Test
         {
             var res = UserService.Instance.Count("Id>@id", new { id = 10 });
         }
+        [Fact]
+        public async void FindAsync()
+        {
+            var res = await UserService.Instance.FindAsync(8);
+        }
     }
 }

@@ -1,0 +1,103 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="Text" Debug="True" Description="Outputs all extended properties from a database." %>
+<%@ Property Name="SampleStringProperty" Default="SomeValue" Type="System.String" %>
+<%@ Property Name="SampleBooleanProperty" Default="True" Type="System.Boolean" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+<%@ Property Name="table" Type="TableSchema" Category="Context" Description="Database to get the extended properties from." %>
+<%@ Property Name="库名" Type="System.String"%>
+<%--<%@ Register Name="BLLTemplate" Template="BLL.cst" MergeProperties="False"  ExcludeProperties="" %>--%>
+<%@ Register Name="ModelTemplate" Template="entity.cst" MergeProperties="False"  ExcludeProperties="" %>
+<%@ Register Name="DalTemplate" Template="Dao.cst" MergeProperties="False"  ExcludeProperties="" %>
+<%@ Register Name="ServiceTemplate" Template="Service.cst" MergeProperties="False"  ExcludeProperties="" %>
+<script runat="template">
+    //解决方案输出路径
+    private string Directory = String.Empty;
+
+     [Editor(typeof(System.Windows.Forms.Design.FolderNameEditor), typeof(System.Drawing.Design.UITypeEditor))] 
+     [Optional, NotChecked]
+     [DefaultValue("")]
+    public string OutputDirectory 
+     { 
+        get {return Directory; }
+        set
+        {
+            if (value.EndsWith("\\")) value = value.Substring(0, value.Length -1);
+            Directory = value;
+        } 
+     }
+</script>
+
+
+
+<script runat="template">
+    //生成业务逻辑层BLL类
+//    private void GenerateBLLClasses()
+//     {
+//         CodeTemplate template =new BLLTemplate();
+//         
+//         template.SetProperty("ClassNamespace",BLL_Namespace);
+//         this.GenerateClassFile(template,"BLL","{0}Manager");
+//     }
+    private void GenerateModelClasses()
+     {
+         var path=System.Environment.CurrentDirectory;
+         CodeTemplate template =new ModelTemplate();
+         template.SetProperty("库名",库名);
+         this.GenerateClassFile(template,path+"/..\\Core\\Jyw.Core\\Entity\\"+库名+"\\Base\\","{0}Entity");
+         
+         CodeTemplate ser =new ServiceTemplate();
+         ser.SetProperty("库名",库名);
+         this.GenerateClassFile(ser,path+"/../\\Services\\Jyw.Service.Base\\"+库名+"\\Base\\","{0}Service");
+         
+         
+          CodeTemplate Dal =new DalTemplate();
+         
+         Dal.SetProperty("库名",库名);
+         this.GenerateClassFile(Dal,path+"/../\\Data\\Jyw.Data.MySql\\"+库名+"\\Base\\","{0}Dao");
+         
+       
+        
+     }
+</script>
+
+<script runat="template">
+  private string GetTableName(string v)
+        {
+            string a = v.Remove(0, v.IndexOf("_")+1).Replace("_","");
+            a=a.Substring(0, 1).ToUpper()+a.Substring(1);
+            return a;
+        }
+    private string GetClassName(string tableName)
+     {
+        string[] strs=tableName.Split('_');
+        string result="";
+        foreach(string s in strs)
+        {
+            result+=s.Substring(0,1).ToUpper()+s.Substring(1)+"_";
+        }
+        return result.Substring(0,result.Length-1);
+     }
+     
+          private void GenerateClassFile(CodeTemplate template,string childFolder,string classNameFormat)
+     {
+           // string FileDirectoryFormat = OutputDirectory +"\\"+ childFolder+"\\" + classNameFormat +".cs";
+            string FileDirectoryFormat = childFolder+"\\" + classNameFormat +".cs";
+            
+               string FileDirectory=string.Format(FileDirectoryFormat,this.GetTableName(table.Name));
+                 //生成模板
+                 template.SetProperty("Table",table);
+                 template.SetProperty("ClassName",string.Format(classNameFormat,this.GetTableName(table.Name))+"");
+                 template.RenderToFile(FileDirectory,true);
+                 Debug.WriteLine(FileDirectory +" 创建成功.");
+             
+     }
+</script>
+
+<%
+     //创建实体层Entity类
+     this.GenerateModelClasses();
+       
+
+  
+    Debug.WriteLine("OK");
+%>
