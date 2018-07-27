@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Dapper;
 using MySql.Data.MySqlClient;
 using XDF.Core.Helper.JsonConfig;
+using XDF.Core.Helper.Log;
 using XDF.Core.Model;
 using DbType = XDF.Core.Helper.JsonConfig.DbType;
 
@@ -47,6 +48,7 @@ namespace XDF.Core.Helper.Db
         {
             using (Db)
             {
+                LogHelper.Sql(sql);
                 return Db.QueryFirstOrDefault<T>(sql, par, commandType: commandType);
             }
         }

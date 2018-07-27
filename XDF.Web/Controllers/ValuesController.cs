@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson.Serialization.Attributes;
+using XDF.Core.Helper.Log;
 using XDF.Core.Helper.Mongo;
 using XDF.Core.Helper.Mongo.Base;
-using XDF.Core.Helper.Tools;
 
 namespace XDF.Web.Controllers
 {
@@ -55,11 +55,11 @@ namespace XDF.Web.Controllers
             sw.Start();
             for (int i = 0; i < total; i++)
             {
-                NLogHelper.Info("nlog bigdata test: " + i);
-                NLogHelper.Error("error test"+i);
+                LogHelper.Info("nlog bigdata test: " + i);
+                LogHelper.Error("error test"+i);
             }
             sw.Stop();
-            NLogHelper.Info($"total: {total}, Elapsed:{sw.ElapsedMilliseconds}");
+            LogHelper.Info($"total: {total}, Elapsed:{sw.ElapsedMilliseconds}");
             return "value"+10/id;
         }
 
