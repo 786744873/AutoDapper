@@ -11,7 +11,6 @@ using MySql.Data.MySqlClient;
 using XDF.Core.Helper.JsonConfig;
 using XDF.Core.Helper.Log;
 using XDF.Core.Model;
-using DbType = XDF.Core.Helper.JsonConfig.DbType;
 
 namespace XDF.Core.Helper.Db
 {
@@ -25,7 +24,7 @@ namespace XDF.Core.Helper.Db
 
             get
             {
-                if (ConnectionConfig.Type == DbType.sqlserver)
+                if (ConnectionConfig.Type == JsonConfig.DbType.sqlserver)
                 {
                     return new SqlConnection(ConnectionConfig.ConnectionString);
                 }
@@ -48,7 +47,7 @@ namespace XDF.Core.Helper.Db
         {
             using (Db)
             {
-                LogHelper.Sql(sql);
+                LogHelper.Sql($"sql:{sql},参数：{par.ToJson()}");
                 return Db.QueryFirstOrDefault<T>(sql, par, commandType: commandType);
             }
         }
@@ -71,6 +70,7 @@ namespace XDF.Core.Helper.Db
         {
             using (Db)
             {
+                LogHelper.Sql($"sql:{sql},参数：{par.ToJson()}");
                 return Db.Query<T>(sql, par, commandType: commandType).ToList();
             }
         }
@@ -86,6 +86,7 @@ namespace XDF.Core.Helper.Db
         {
             using (Db)
             {
+                LogHelper.Sql($"sql:{sql},参数：{par.ToJson()}");
                 return await Db.QueryAsync<T>(sql, par, commandType: commandType);
             }
         }
@@ -196,7 +197,7 @@ namespace XDF.Core.Helper.Db
                 {
                     info.PageCount = info.PageSize == 0 ? 0 : Math.Ceiling(info.Count.ToDecimal() / info.PageSize.ToDecimal()).ToInt();
 
-                    sql.Append(ConnectionConfig.Type == DbType.sqlserver ? " OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY " : " limit @Offset,@Limit");
+                    sql.Append(ConnectionConfig.Type == JsonConfig.DbType.sqlserver ? " OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY " : " limit @Offset,@Limit");
                     if (info.Offset.ToInt() <= 0)
                     {
                         info.Offset = (info.PageIndex - 1) * info.PageSize;
