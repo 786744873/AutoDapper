@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using XDF.Core.Helper.Mongo;
 
 namespace XDF.Console
 {
@@ -19,7 +20,8 @@ namespace XDF.Console
                 System.Console.WriteLine(((List<AutoHomeShopListEntity>) resultItem.Results["CarList"]).Count);
                 foreach (var item in ((List<AutoHomeShopListEntity>) resultItem.Results["CarList"]))
                 {
-                    System.Console.WriteLine(item);
+                  MongoRepository.Instance.Add(item);
+                  System.Console.WriteLine(item);
                 }
             }
         }

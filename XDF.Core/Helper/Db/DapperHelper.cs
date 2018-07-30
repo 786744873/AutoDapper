@@ -47,7 +47,7 @@ namespace XDF.Core.Helper.Db
         {
             using (Db)
             {
-                LogHelper.Sql($"sql:{sql},参数：{par.ToJson()}");
+                LogHelper.Sql(sql);
                 return Db.QueryFirstOrDefault<T>(sql, par, commandType: commandType);
             }
         }
@@ -70,7 +70,7 @@ namespace XDF.Core.Helper.Db
         {
             using (Db)
             {
-                LogHelper.Sql($"sql:{sql},参数：{par.ToJson()}");
+                LogHelper.Sql(sql);
                 return Db.Query<T>(sql, par, commandType: commandType).ToList();
             }
         }
@@ -86,7 +86,7 @@ namespace XDF.Core.Helper.Db
         {
             using (Db)
             {
-                LogHelper.Sql($"sql:{sql},参数：{par.ToJson()}");
+                LogHelper.Sql(sql);
                 return await Db.QueryAsync<T>(sql, par, commandType: commandType);
             }
         }

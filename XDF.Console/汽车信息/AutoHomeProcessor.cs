@@ -15,6 +15,7 @@ namespace XDF.Console
             foreach (var modelHtml in modelHtmlList)
             {
                 AutoHomeShopListEntity entity = new AutoHomeShopListEntity();
+                entity.ShopId = 83106681;
                 entity.DetailUrl = modelHtml.XPath(".//a/@href").GetValue();
                 entity.CarImg = modelHtml.XPath(".//a/div[@class='carbox-carimg']/img/@src").GetValue();
                 var price = modelHtml.XPath(".//a/div[@class='carbox-info']").GetValue(DotnetSpider.Core.Selector.ValueOption.InnerText).Trim().Replace(" ", string.Empty).Replace("\n", string.Empty).Replace("\t", string.Empty).TrimStart('¥').Split("¥");

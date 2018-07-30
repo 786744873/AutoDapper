@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using XDF.Core.Helper.Mongo.Base;
 
 namespace XDF.Console
 {
-    public class AutoHomeShopListEntity
+    [Mongo("HomeCar","CarDetail")]
+    public class AutoHomeShopListEntity:MongoEntity
     {
+        public long ShopId { get; set; }
         public string DetailUrl { get; set; }
 
         public string CarImg { get; set; }

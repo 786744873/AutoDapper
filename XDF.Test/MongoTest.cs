@@ -12,6 +12,16 @@ namespace XDF.Test
 
     public class MongoDbTest
     {
+        [Fact]
+        public void AddStudent()
+        {
+            var result = MongoRepository.Instance.Add(new Student()
+            {
+                Age = 111,
+                Name = "xiaoming"
+            });
+            Assert.True(result);
+        }
 
         #region Add
         [Fact]
@@ -297,6 +307,12 @@ namespace XDF.Test
 
 
         public List<User> Sons { get; set; }
+    }
+    [Mongo("test2","Student")]
+    public class Student: MongoEntity
+    {
+        public  string Name { get; set; }
+        public int Age { get; set; }
     }
 
     public enum Sex
