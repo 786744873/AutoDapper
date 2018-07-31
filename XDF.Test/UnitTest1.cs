@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using Newtonsoft.Json;
 
@@ -19,6 +21,14 @@ namespace XDF.Test
         public void Test1()
         {
             var json=JsonConvert.SerializeObject(new StudentInfo { Name = "уехЩ", Age = 18, Birthday = DateTime.Now });
+        }
+
+        [Fact]
+        public void Test2()
+        {
+          Student s=new Student();
+            s.Name += "23423";
+
         }
     }
 }
