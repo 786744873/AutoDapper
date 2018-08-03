@@ -774,5 +774,14 @@ namespace System
             return JsonConvert.SerializeObject(v, Formatting.None, timeConverter);
         }
         #endregion
+
+        public static string DeserializeUtf8(this byte[] stream)
+        {
+            return stream == null ? (string)null : Encoding.UTF8.GetString(stream);
+        }
+        public static byte[] SerializeUtf8(this string str)
+        {
+            return str == null ? (byte[])null : Encoding.UTF8.GetBytes(str);
+        }
     }
 }

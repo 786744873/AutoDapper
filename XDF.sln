@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeSmith", "CodeSmith", "{
 		CodeSimth\Table.cst = CodeSimth\Table.cst
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XDF.RabbitMq", "XDF.RabbitMq\XDF.RabbitMq.csproj", "{DD16819B-094E-4335-840F-BF79DA051561}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,14 @@ Global
 		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Release|x64.ActiveCfg = Release|Any CPU
 		{27592E3C-B38B-49A9-9EB3-3D31D185C50A}.Release|x64.Build.0 = Release|Any CPU
+		{DD16819B-094E-4335-840F-BF79DA051561}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD16819B-094E-4335-840F-BF79DA051561}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD16819B-094E-4335-840F-BF79DA051561}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DD16819B-094E-4335-840F-BF79DA051561}.Debug|x64.Build.0 = Debug|Any CPU
+		{DD16819B-094E-4335-840F-BF79DA051561}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD16819B-094E-4335-840F-BF79DA051561}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD16819B-094E-4335-840F-BF79DA051561}.Release|x64.ActiveCfg = Release|Any CPU
+		{DD16819B-094E-4335-840F-BF79DA051561}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using RabbitMQ.Client;
+using XDF.RabbitMq;
 
 namespace XDF.MQSend
 {
@@ -8,34 +9,39 @@ namespace XDF.MQSend
     {
         static void Main(string[] args)
         {
-            var factorey = new ConnectionFactory()
+            var rabbitMqProxy = new RabbitMqService(new MqConfig
             {
-                HostName = "",
-                Port = 5672,
+                AutomaticRecoveryEnabled = true,
+                HeartBeat = 60,
+                NetworkRecoveryInterval = new TimeSpan(60),
+                Host = "",
                 UserName = "guest",
                 Password = "guest"
-            };
-            using (var connection = factorey.CreateConnection())
-            {
-                using (var channel = connection.CreateModel())
-                {
-                    //声明一个队列，设置队列是否持久化，排他性，与自动删除
-                    channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false,
-                        arguments: null);
-                    string message = "Hello RabbitMQ!1111";
-                    string input;
-                    do
-                    {
-                        input = Console.ReadLine();
+            });
 
-                        var sendBytes = Encoding.UTF8.GetBytes(input);
-                        //发布消息
-                        channel.BasicPublish(exchange: "", routingKey: "hello", basicProperties: null, body: sendBytes);
-                    } while (input != null && input.Trim().ToLower() != "exit");
-                    var body = Encoding.UTF8.GetBytes(message);
-                    
-                }
+            var input = Input();
+
+            while (input != "exit")
+            {
+                var log = new MessageModel
+                {
+                    CreateDateTime = DateTime.Now,
+                    Msg = input
+                };
+                rabbitMqProxy.Publish(log);
+
+                input = Input();
             }
+
+            rabbitMqProxy.Dispose();
+        }
+
+        private static string Input()
+        {
+            System.Console.WriteLine("请输入信息：");
+
+            var input = Console.ReadLine();
+            return input;
         }
     }
 }
