@@ -25,7 +25,7 @@ namespace XDF.WinForm
         public void InitBrowser()
         {
             Cef.Initialize(new CefSettings());
-            browser = new ChromiumWebBrowser("www.baidu.com");
+            browser = new ChromiumWebBrowser("http://bm2018.h5.staff.xdf.cn");
             this.Controls.Add(browser);
             browser.Dock = DockStyle.Fill;
         }

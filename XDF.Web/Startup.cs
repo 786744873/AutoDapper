@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -13,7 +14,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using NLog.Extensions.Logging;
 using NLog.Web;
-using XDF.Web.Middleware;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace XDF.Web
 {
@@ -47,6 +48,13 @@ namespace XDF.Web
                            .AllowCredentials(); //指定处理cookie
                 });
             });
+            services.AddSwaggerGen(c =>
+            {
+                //配置第一个Doc
+                c.SwaggerDoc("v1", new Info { Title = "My API_1", Version = "v1" });
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "XDF.Web.XML"));
+            });
+        
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,17 +70,21 @@ namespace XDF.Web
                 builder.AllowAnyHeader();
                 builder.AllowAnyMethod();
             });
-            //中间件
-            //app.Use(async (context, _next) =>
-            //{
-            //    context.Response.Headers.Add("Server", "SomeServer");
-            //    await _next();
-            //});
-            app.UseErrorHandling();
+           
+            //添加NLog
+            loggerFactory.AddNLog();
+            env.ConfigureNLog("nlog.config");//读取Nlog配置文件
+            //添加Swagger
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = "swagger";
+            });
+            app.UseSwagger();
+            //app.UseErrorHandling();
             app.UseMvc();
             app.UseStaticFiles();
-            loggerFactory.AddNLog();//添加NLog
-            env.ConfigureNLog("nlog.config");//读取Nlog配置文件
+
         }
     }
 }

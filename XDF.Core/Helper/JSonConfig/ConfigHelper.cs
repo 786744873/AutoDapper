@@ -16,7 +16,7 @@ namespace XDF.Core.Helper.JsonConfig
         private static string _mongo;
         private static string _redisStr;
 
-        private static string _taskStr;
+        private static string _rabbitMqStr;
         /// <summary>
         /// app环境
         /// </summary>
@@ -188,21 +188,21 @@ namespace XDF.Core.Helper.JsonConfig
                 return _mongo;
             }
         }
-        public static string GetAppTaskStr
+        public static string GetRabbitMqStr
         {
             get
             {
-                if (_taskStr.IsStringEmpty())
+                if (_rabbitMqStr.IsStringEmpty())
                 {
                     lock (Lock)
                     {
-                        if (_taskStr.IsStringEmpty())
+                        if (_rabbitMqStr.IsStringEmpty())
                         {
-                            _taskStr = ConfigurationRoot.GetSection("Task").Value;
+                            _rabbitMqStr = ConfigurationRoot.GetSection("RabbitMq").Value;
                         }
                     }
                 }
-                return _taskStr;
+                return _rabbitMqStr;
             }
         }
         public static bool GetEnvironment
