@@ -21,7 +21,14 @@ namespace XDF.RabbitMq
         /// 队列名称
         /// </summary>
         public string QueueName { get; private set; }
-
+        /// <summary>
+        /// 路由键
+        /// </summary>
+        public  string RoutingKey { get; set; }
+        /// <summary>
+        /// 交换机类型
+        /// </summary>
+        public string ExchangeType { get; set; }
         /// <summary>
         /// 是否持久化
         /// </summary>

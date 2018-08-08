@@ -775,6 +775,7 @@ namespace System
         }
         #endregion
 
+        #region DeserializeUtf8
         public static string DeserializeUtf8(this byte[] stream)
         {
             return stream == null ? (string)null : Encoding.UTF8.GetString(stream);
@@ -782,6 +783,7 @@ namespace System
         public static byte[] SerializeUtf8(this string str)
         {
             return str == null ? (byte[])null : Encoding.UTF8.GetBytes(str);
-        }
+        } 
+        #endregion
     }
 }

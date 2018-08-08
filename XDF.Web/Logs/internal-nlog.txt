@@ -108,3 +108,69 @@
 2018-08-07 16:03:19.7025 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: task
 2018-08-07 16:03:19.7112 Info Closing old configuration.
 2018-08-07 16:03:19.7263 Info Found 107 configuration items
+2018-08-07 16:58:24.5431 Info Message Template Auto Format enabled
+2018-08-07 16:58:24.6227 Info Adding target File Target[debug]
+2018-08-07 16:58:24.6227 Info Adding target File Target[sql]
+2018-08-07 16:58:24.6227 Info Adding target File Target[info]
+2018-08-07 16:58:24.6227 Info Adding target File Target[error]
+2018-08-07 16:58:24.6227 Info Adding target File Target[task]
+2018-08-07 16:58:24.6683 Info Configured from an XML element in C:\Users\renfushuai\Source\Repos\AutoDapper\XDF.Web\bin\Debug\netcoreapp2.1\NLog.config...
+2018-08-07 16:58:24.6781 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: task
+2018-08-07 16:58:24.6781 Info Found 107 configuration items
+2018-08-07 16:58:24.7052 Info Configuration initialized.
+2018-08-07 16:58:24.7135 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.8.8046. Product version: 4.5.8.
+2018-08-07 16:58:24.7135 Info Message Template Auto Format enabled
+2018-08-07 16:58:24.7135 Info Found 107 configuration items
+2018-08-07 16:58:24.7135 Info Adding target File Target[debug]
+2018-08-07 16:58:24.7135 Info Adding target File Target[sql]
+2018-08-07 16:58:24.7135 Info Adding target File Target[info]
+2018-08-07 16:58:24.7135 Info Adding target File Target[error]
+2018-08-07 16:58:24.7135 Info Adding target File Target[task]
+2018-08-07 16:58:24.7135 Info Configured from an XML element in C:\Users\renfushuai\Source\Repos\AutoDapper\XDF.Web\nlog.config...
+2018-08-07 16:58:24.7135 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: task
+2018-08-07 16:58:24.7272 Info Closing old configuration.
+2018-08-07 16:58:24.7510 Info Found 107 configuration items
+2018-08-08 10:19:15.2066 Info Message Template Auto Format enabled
+2018-08-08 10:19:15.3191 Info Adding target File Target[debug]
+2018-08-08 10:19:15.3191 Info Adding target File Target[sql]
+2018-08-08 10:19:15.3191 Info Adding target File Target[info]
+2018-08-08 10:19:15.3191 Info Adding target File Target[error]
+2018-08-08 10:19:15.3265 Info Adding target File Target[task]
+2018-08-08 10:19:15.3654 Info Configured from an XML element in C:\Users\renfushuai\Source\Repos\AutoDapper\XDF.Web\bin\Debug\netcoreapp2.1\NLog.config...
+2018-08-08 10:19:15.3817 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: task
+2018-08-08 10:19:15.3885 Info Found 107 configuration items
+2018-08-08 10:19:15.4085 Info Configuration initialized.
+2018-08-08 10:19:15.4240 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.8.8046. Product version: 4.5.8.
+2018-08-08 10:19:15.4240 Info Message Template Auto Format enabled
+2018-08-08 10:19:15.4346 Info Found 107 configuration items
+2018-08-08 10:19:15.4346 Info Adding target File Target[debug]
+2018-08-08 10:19:15.4346 Info Adding target File Target[sql]
+2018-08-08 10:19:15.4346 Info Adding target File Target[info]
+2018-08-08 10:19:15.4346 Info Adding target File Target[error]
+2018-08-08 10:19:15.4346 Info Adding target File Target[task]
+2018-08-08 10:19:15.4346 Info Configured from an XML element in C:\Users\renfushuai\Source\Repos\AutoDapper\XDF.Web\nlog.config...
+2018-08-08 10:19:15.4346 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: task
+2018-08-08 10:19:15.4346 Info Closing old configuration.
+2018-08-08 10:19:15.4817 Info Found 107 configuration items
+2018-08-08 10:43:22.7308 Info Message Template Auto Format enabled
+2018-08-08 10:43:22.8307 Info Adding target File Target[debug]
+2018-08-08 10:43:22.8307 Info Adding target File Target[sql]
+2018-08-08 10:43:22.8307 Info Adding target File Target[info]
+2018-08-08 10:43:22.8307 Info Adding target File Target[error]
+2018-08-08 10:43:22.8307 Info Adding target File Target[task]
+2018-08-08 10:43:22.8758 Info Configured from an XML element in C:\Users\renfushuai\Source\Repos\AutoDapper\XDF.Web\bin\Debug\netcoreapp2.1\NLog.config...
+2018-08-08 10:43:22.8758 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: task
+2018-08-08 10:43:22.8949 Info Found 107 configuration items
+2018-08-08 10:43:22.9159 Info Configuration initialized.
+2018-08-08 10:43:22.9286 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.5.8.8046. Product version: 4.5.8.
+2018-08-08 10:43:22.9379 Info Message Template Auto Format enabled
+2018-08-08 10:43:22.9379 Info Found 107 configuration items
+2018-08-08 10:43:22.9379 Info Adding target File Target[debug]
+2018-08-08 10:43:22.9379 Info Adding target File Target[sql]
+2018-08-08 10:43:22.9379 Info Adding target File Target[info]
+2018-08-08 10:43:22.9379 Info Adding target File Target[error]
+2018-08-08 10:43:22.9379 Info Adding target File Target[task]
+2018-08-08 10:43:22.9503 Info Configured from an XML element in C:\Users\renfushuai\Source\Repos\AutoDapper\XDF.Web\nlog.config...
+2018-08-08 10:43:22.9503 Warn Unused target detected. Add a rule for this target to the configuration. TargetName: task
+2018-08-08 10:43:22.9503 Info Closing old configuration.
+2018-08-08 10:43:22.9861 Info Found 107 configuration items

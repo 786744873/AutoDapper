@@ -4,60 +4,72 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using XDF.Core.Helper.JsonConfig;
 using XDF.Core.Helper.Log;
-
 namespace XDF.RabbitMq
 {
-    #region RabbitMQ.Client原生封装类
     /// <summary>
     /// RabbitMQ.Client原生封装类
     /// </summary>
     public class RabbitMqService : IDisposable
     {
+        private RabbitMqService()
+        {
+
+        }
+        private static readonly  object Lock=new object();
+        private static RabbitMqService _instance = null;
+        public static RabbitMqService Instance
+        {
+            get
+            {
+                if (_instance==null)
+                {
+                    lock (Lock)
+                    {
+                        if (_instance==null)
+                        {
+                                var factory = new ConnectionFactory
+                                {
+                                    //设置主机名
+                                    HostName =JsonConfigHelper.GetRabbitMqStr,
+
+                                    //设置心跳时间
+                                    RequestedHeartbeat = 60,
+
+                                    //设置自动重连
+                                    AutomaticRecoveryEnabled = true,
+
+                                    //重连时间
+                                    NetworkRecoveryInterval = new TimeSpan(60),
+
+                                    //用户名
+                                    UserName = "guest",
+
+                                    //密码
+                                    Password = "guest"
+                                };
+                                factory.AutomaticRecoveryEnabled = true;
+                                factory.NetworkRecoveryInterval = new TimeSpan(1000);
+                                _conn = _conn ?? factory.CreateConnection();
+                            _instance =new RabbitMqService();
+                        }
+                    }
+                }
+
+                return _instance;
+            }
+        }
         #region 初始化
         //RabbitMQ建议客户端线程之间不要共用Model，至少要保证共用Model的线程发送消息必须是串行的，但是建议尽量共用Connection。
-        private static readonly ConcurrentDictionary<string, IModel> ModelDic =
-            new ConcurrentDictionary<string, IModel>();
+        private static readonly ConcurrentDictionary<string, IModel> ModelDic = new ConcurrentDictionary<string, IModel>();
 
         private static RabbitMqAttribute _rabbitMqAttribute;
 
         private const string RabbitMqAttribute = "RabbitMqAttribute";
 
         private static IConnection _conn;
-
-        private static readonly object LockObj = new object();
-
-        private static void Open(MqConfig config)
-        {
-            if (_conn != null) return;
-            lock (LockObj)
-            {
-                var factory = new ConnectionFactory
-                {
-                    //设置主机名
-                    HostName = config.Host,
-
-                    //设置心跳时间
-                    RequestedHeartbeat = config.HeartBeat,
-
-                    //设置自动重连
-                    AutomaticRecoveryEnabled = config.AutomaticRecoveryEnabled,
-
-                    //重连时间
-                    NetworkRecoveryInterval = config.NetworkRecoveryInterval,
-
-                    //用户名
-                    UserName = config.UserName,
-
-                    //密码
-                    Password = config.Password
-                };
-                factory.AutomaticRecoveryEnabled = true;
-                factory.NetworkRecoveryInterval = new TimeSpan(1000);
-                _conn = _conn ?? factory.CreateConnection();
-            }
-        }
-
+        
         private static RabbitMqAttribute GetRabbitMqAttribute<T>()
 
         {
@@ -68,11 +80,6 @@ namespace XDF.RabbitMq
             }
 
             return _rabbitMqAttribute;
-        }
-
-        public RabbitMqService(MqConfig config)
-        {
-            Open(config);
         }
         #endregion
 
@@ -95,9 +102,7 @@ namespace XDF.RabbitMq
         /// <param name="durable">持久化</param>
         /// <param name="autoDelete">自动删除</param>
         /// <param name="arguments">参数</param>
-        private static void ExchangeDeclare(IModel iModel, string exchange, string type = ExchangeType.Direct,
-            bool durable = true,
-            bool autoDelete = false, IDictionary<string, object> arguments = null)
+        private static void ExchangeDeclare(IModel iModel, string exchange, string type = ExchangeType.Direct,bool durable = true,bool autoDelete = false, IDictionary<string, object> arguments = null)
         {
             exchange = exchange.IsStringEmpty() ? "" : exchange.Trim();
             iModel.ExchangeDeclare(exchange, type, durable, autoDelete, arguments);
@@ -134,14 +139,15 @@ namespace XDF.RabbitMq
         /// <param name="exchange">交换机名称</param>
         /// <param name="queue">队列名称</param>
         /// <param name="routingKey"></param>
+        /// <param name="exchangeType">交换机类型</param>
         /// <param name="isProperties">是否持久化</param>
         /// <returns></returns>
-        private static IModel GetModel(string exchange, string queue, string routingKey, bool isProperties = false)
+        private static IModel GetModel(string exchange, string queue, string routingKey,string exchangeType, bool isProperties = false)
         {
             return ModelDic.GetOrAdd(queue, key =>
             {
                 var model = _conn.CreateModel();
-                ExchangeDeclare(model, exchange, ExchangeType.Fanout, isProperties);
+                ExchangeDeclare(model, exchange, exchangeType, isProperties);
                 QueueDeclare(model, queue, isProperties);
                 model.QueueBind(queue, exchange, routingKey);
                 ModelDic[queue] = model;
@@ -189,10 +195,10 @@ namespace XDF.RabbitMq
             var body = command.ToJson();
             var exchange = queueInfo.ExchangeName;
             var queue = queueInfo.QueueName;
-            var routingKey = queueInfo.ExchangeName;
+            var routingKey = queueInfo.RoutingKey;
             var isProperties = queueInfo.IsProperties;
-
-            Publish(exchange, queue, routingKey, body, isProperties);
+            var exchangeType = queueInfo.ExchangeType;
+            Publish(exchange, queue, routingKey, body, exchangeType, isProperties);
         }
 
         /// <summary>
@@ -202,11 +208,12 @@ namespace XDF.RabbitMq
         /// <param name="body">队列信息</param>
         /// <param name="exchange">交换机名称</param>
         /// <param name="queue">队列名</param>
+        /// <param name="exchangeType">交换机类型</param>
         /// <param name="isProperties">是否持久化</param>
         /// <returns></returns>
-        public void Publish(string exchange, string queue, string routingKey, string body, bool isProperties = false)
+        public void Publish(string exchange, string queue, string routingKey, string body, string exchangeType,bool isProperties = false)
         {
-            var channel = GetModel(exchange, queue, routingKey, isProperties);
+            var channel = GetModel(exchange, queue, routingKey, exchangeType, isProperties);
 
             try
             {
@@ -230,21 +237,17 @@ namespace XDF.RabbitMq
             var queueInfo = typeof(T).GetAttribute<RabbitMqAttribute>();
             if (queueInfo.IsStringEmpty())
                 throw new ArgumentException(RabbitMqAttribute);
-
-            var deadLetterExchange = queueInfo.ExchangeName;
-            string deadLetterQueue = queueInfo.QueueName;
-            var deadLetterRoutingKey = deadLetterExchange;
             var deadLetterBody = new DeadLetterQueue
             {
                 Body = body,
                 CreateDateTime = DateTime.Now,
                 ExceptionMsg = ex.GetInnestException().Message,
                 Queue = queue,
-                RoutingKey = deadLetterExchange,
-                Exchange = deadLetterRoutingKey
+                RoutingKey = queueInfo.ExchangeName,
+                Exchange = queueInfo.RoutingKey
             };
 
-            Publish(deadLetterExchange, deadLetterQueue, deadLetterRoutingKey, Extension.ToJson(deadLetterBody));
+            Publish(queueInfo.ExchangeName, queueInfo.QueueName, queueInfo.RoutingKey, Extension.ToJson(deadLetterBody),queueInfo.ExchangeType);
         }
         #endregion
 
@@ -316,9 +319,9 @@ namespace XDF.RabbitMq
         {
             var queueInfo = GetRabbitMqAttribute<T>();
             if (queueInfo.IsStringEmpty())
-                throw new ArgumentException("RabbitMqAttribute");
+                throw new ArgumentException(RabbitMqAttribute);
 
-            Pull(queueInfo.ExchangeName, queueInfo.QueueName, queueInfo.ExchangeName, handler);
+            Pull(queueInfo.ExchangeName, queueInfo.QueueName, queueInfo.RoutingKey,queueInfo.ExchangeType, handler);
         }
 
         /// <summary>
@@ -328,15 +331,16 @@ namespace XDF.RabbitMq
         /// <param name="exchange"></param>
         /// <param name="queue"></param>
         /// <param name="routingKey"></param>
+        /// <param name="exchangeType"></param>
         /// <param name="handler">消费处理</param>
-        private void Pull<T>(string exchange, string queue, string routingKey, Action<T> handler) where T : class
+        private void Pull<T>(string exchange, string queue, string routingKey,string exchangeType, Action<T> handler) where T : class
         {
-            var channel = GetModel(exchange, queue, routingKey);
+            var channel = GetModel(exchange, queue, routingKey, exchangeType);
 
             var result = channel.BasicGet(queue, false);
             if (result.IsStringEmpty())
                 return;
-            
+
             var msg = result.Body.DeserializeUtf8().ToModel<T>();
             try
             {
@@ -344,7 +348,7 @@ namespace XDF.RabbitMq
             }
             catch (Exception ex)
             {
-                LogHelper.Error("队列接收消息:"+ex.StackTrace);
+                LogHelper.Error("队列接收消息:" + ex.StackTrace);
             }
             finally
             {
@@ -370,13 +374,12 @@ namespace XDF.RabbitMq
             if (queueInfo.IsStringEmpty())
                 throw new ArgumentException("RabbitMqAttribute");
 
-            var body = Extension.ToJson(command);
+            var body = command.ToJson();
             var exchange = queueInfo.ExchangeName;
             var queue = queueInfo.QueueName;
             var routingKey = queueInfo.ExchangeName;
             var isProperties = queueInfo.IsProperties;
-
-            return RpcClient(exchange, queue, routingKey, body, isProperties);
+            return RpcClient(exchange, queue, routingKey, body, queueInfo.ExchangeType, isProperties);
         }
 
         /// <summary>
@@ -385,12 +388,13 @@ namespace XDF.RabbitMq
         /// <param name="exchange"></param>
         /// <param name="queue"></param>
         /// <param name="routingKey"></param>
+        /// <param name="exchangeType"></param>
         /// <param name="body"></param>
         /// <param name="isProperties"></param>
         /// <returns></returns>
-        public string RpcClient(string exchange, string queue, string routingKey, string body, bool isProperties = false)
+        public string RpcClient(string exchange, string queue, string routingKey,string exchangeType, string body, bool isProperties = false)
         {
-            var channel = GetModel(exchange, queue, routingKey, isProperties);
+            var channel = GetModel(exchange, queue, routingKey, exchangeType, isProperties);
 
             var consumer = new QueueingBasicConsumer(channel);
             channel.BasicConsume(queue, true, consumer);
@@ -476,7 +480,7 @@ namespace XDF.RabbitMq
                 }
                 finally
                 {
-                    channel.BasicPublish(exchange, props.ReplyTo, replyProps, msg.ToJson().SerializeUtf8());
+                    channel.BasicPublish(exchange, props.ReplyTo, replyProps, Extension.ToJson(msg).SerializeUtf8());
                     channel.BasicAck(ea.DeliveryTag, false);
                 }
             };
@@ -500,5 +504,4 @@ namespace XDF.RabbitMq
         }
         #endregion
     }
-    #endregion
 }

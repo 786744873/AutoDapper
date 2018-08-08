@@ -3,19 +3,6 @@
 namespace XDF.RabbitMq
 {
     /// <summary>
-    /// 
-    /// </summary>
-    public class MqConfig
-    {
-        public string Host { get; set; }
-        public ushort HeartBeat { get; set; }
-        public bool AutomaticRecoveryEnabled { get; set; }
-        public TimeSpan NetworkRecoveryInterval { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-    }
-
-    /// <summary>
     /// 死信队列实体
     /// </summary>
     [RabbitMq("dead-letter-{Queue}", ExchangeName = "dead-letter-{exchange}")]

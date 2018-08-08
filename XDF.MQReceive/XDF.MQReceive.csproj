@@ -6,7 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Config\**" />
+    <EmbeddedResource Remove="Config\**" />
+    <None Remove="Config\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
+    <PackageReference Include="Topshelf" Version="4.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XDF.Core\XDF.Core.csproj" />
+    <ProjectReference Include="..\XDF.RabbitMq\XDF.RabbitMq.csproj" />
   </ItemGroup>
 
 </Project>

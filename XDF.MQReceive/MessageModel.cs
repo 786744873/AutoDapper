@@ -1,9 +1,9 @@
 ﻿using System;
 using XDF.RabbitMq;
 
-namespace XDF.MQSend
+namespace XDF.MQReceive
 {
-    [RabbitMq("QueueNameTest", ExchangeName = "ExchangeNameTest",RoutingKey = "cat", ExchangeType=ExchangeType.Direct,IsProperties = false)]
+    [RabbitMq("QueueNameTest", ExchangeName = "ExchangeNameTest", RoutingKey = "dog", ExchangeType = ExchangeType.Direct, IsProperties = false)]
     public class MessageModel
     {
         public string Msg { get; set; }

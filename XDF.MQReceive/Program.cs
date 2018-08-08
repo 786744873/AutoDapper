@@ -2,37 +2,32 @@
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Topshelf;
+using XDF.RabbitMq;
 
 namespace XDF.MQReceive
 {
     class Program
     {
+        private static string Input()
+        {
+            Console.WriteLine("是否从队列取一条数据：Y/N");
+            var input = Console.ReadLine();
+            return input;
+        }
         static void Main(string[] args)
         {
-            var factorey = new ConnectionFactory()
+            var input = Input();
+            while (input.ToLower() != "n")
             {
-                HostName = "",
-                Port = 5672,
-                UserName = "guest",
-                Password = "guest"
-            };
-            using (var connection=factorey.CreateConnection())
-            {
-                using (var channel=connection.CreateModel())
+                RabbitMqService.Instance.Pull<MessageModel>(msg =>
                 {
-                    channel.QueueDeclare(queue: "hello", durable: false, exclusive: false, autoDelete: false,
-                        arguments: null);
-                    var consumer = new EventingBasicConsumer(channel);
-                    consumer.Received += (model, ea) =>
-                    {
-                        var message = Encoding.UTF8.GetString(ea.Body);
-                        Console.WriteLine($"Received: {message}");
-                    };
-                    channel.BasicConsume(queue:"hello",autoAck:true, consumer: consumer);
-                    Console.WriteLine("按任意键退出。。");
-                    Console.ReadLine();
-                }
+                    Console.WriteLine(msg.ToJson());
+                });
+
+                input = Input();
             }
+            RabbitMqService.Instance.Dispose();
         }
     }
 }

@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace XDF.Web.Controllers
 {
+    /// <summary>
+    /// 订单详情
+    /// </summary>
     public class OrderDetail
     {
         /// <summary>
@@ -17,7 +20,10 @@ namespace XDF.Web.Controllers
         /// 用户Id
         /// </summary>
         public int UserId { get; set; }
-}
+    }
+    /// <summary>
+    /// 订单接口
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
@@ -30,7 +36,7 @@ namespace XDF.Web.Controllers
         [HttpGet]
         public OrderDetail Get(string orderCode)
         {
-            return new OrderDetail(){OrderId = "1213arweqrwew",UserId=100};
+            return new OrderDetail() { OrderId = "1213arweqrwew", UserId = 100 };
         }
     }
 }
