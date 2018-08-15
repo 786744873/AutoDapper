@@ -13,7 +13,7 @@ namespace XDF.DapperLambda
     /// 指令
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class  Command<T> : ICommand<T>, Interface.ISet<T>
+    public class  CommandSet<T> 
     {
         protected readonly SqlProvider<T> SqlProvider;
         protected readonly IDbConnection DbCon;
@@ -27,21 +27,21 @@ namespace XDF.DapperLambda
 
         internal LambdaExpression IfNotExistsExpression { get; set; }
 
-        public Command(IDbConnection conn, SqlProvider<T> sqlProvider)
+        public CommandSet(IDbConnection conn, SqlProvider<T> sqlProvider)
         {
             SqlProvider = sqlProvider;
             DbCon = conn;
             TableType = typeof(T);
             SetContext = new DataBaseContext<T>
             {
-                Set = this,
+                CommandSet = this,
                 OperateType = EOperateType.Command
             };
             sqlProvider.Context = SetContext;
 
         }
 
-        public Command(IDbConnection conn, SqlProvider<T> sqlProvider, IDbTransaction dbTransaction)
+        public CommandSet(IDbConnection conn, SqlProvider<T> sqlProvider, IDbTransaction dbTransaction)
         {
             SqlProvider = sqlProvider;
             DbCon = conn;
@@ -49,7 +49,7 @@ namespace XDF.DapperLambda
             TableType = typeof(T);
             SetContext = new DataBaseContext<T>
             {
-                Set = this,
+                CommandSet = this,
                 OperateType = EOperateType.Command
             };
 
@@ -83,14 +83,14 @@ namespace XDF.DapperLambda
 
             return DbCon.Execute(SqlProvider.SqlString, SqlProvider.Params, _dbTransaction);
         }
-        public ICommand<T> Where(Expression<Func<T, bool>> predicate)
+        public CommandSet<T> Where(Expression<Func<T, bool>> predicate)
         {
             WhereExpression = WhereExpression == null ? predicate : ((Expression<Func<T, bool>>)WhereExpression).And(predicate);
 
             return this;
         }
 
-        public ICommand<T> IfNotExists(Expression<Func<T, bool>> predicate)
+        public CommandSet<T> IfNotExists(Expression<Func<T, bool>> predicate)
         {
             IfNotExistsExpression = IfNotExistsExpression == null ? predicate : ((Expression<Func<T, bool>>)IfNotExistsExpression).And(predicate);
 

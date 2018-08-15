@@ -44,11 +44,10 @@ namespace XDF.Web.Controllers
         }
         [HttpGet]
         [Route("AddConfig")]
-        public AjaxResultModel<int> AddConfig()
+        public AjaxResultModel<List<ConfigEntity>> AddConfig()
         {
             var con = new SqlConnection("user id=db_whbmowner;data source=10.202.202.245;password=levitra5gt#;persist security info=True;initial catalog =BJ20140915;Connect Timeout=300");
-          var res=  con.CommandSet<ConfigEntity>().Insert(new ConfigEntity(){SName = "test",SValue = "test",SDescription = "ceshi"});
-            con.Transaction(tc => { tc.CommandSet<ConfigEntity>().Insert(new ConfigEntity()); });
+            var res = con.QuerySet<ConfigEntity>().Where(m=>m.Id>=1).ToList();
             return AjaxResult.Success(res);
         }
     }

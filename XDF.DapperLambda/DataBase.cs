@@ -6,14 +6,14 @@ namespace XDF.DapperLambda
 {
     public static class DataBase
     {
-        //public static QuerySet<T> QuerySet<T>(this SqlConnection sqlConnection)
-        //{
-        //    return new QuerySet<T>(sqlConnection, new SqlProvider<T>());
-        //}
-
-        public static Command<T> CommandSet<T>(this SqlConnection sqlConnection)
+        public static QuerySet<T> QuerySet<T>(this SqlConnection sqlConnection)
         {
-            return new Command<T>(sqlConnection, new SqlProvider<T>());
+            return new QuerySet<T>(sqlConnection, new SqlProvider<T>());
+        }
+
+        public static CommandSet<T> CommandSet<T>(this SqlConnection sqlConnection)
+        {
+            return new CommandSet<T>(sqlConnection, new SqlProvider<T>());
         }
 
         public static void Transaction(this SqlConnection sqlConnection, Action<TransContext> action)
@@ -50,9 +50,9 @@ namespace XDF.DapperLambda
         //    return new QuerySet<T>(SqlConnection, new SqlProvider<T>(), IDbTransaction);
         //}
 
-        public Command<T> CommandSet<T>()
+        public CommandSet<T> CommandSet<T>()
         {
-            return new Command<T>(SqlConnection, new SqlProvider<T>(), IDbTransaction);
+            return new CommandSet<T>(SqlConnection, new SqlProvider<T>(), IDbTransaction);
         }
     }
 }

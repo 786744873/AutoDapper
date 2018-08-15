@@ -15,6 +15,7 @@ using Newtonsoft.Json.Serialization;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using Swashbuckle.AspNetCore.Swagger;
+using XDF.Web.Middleware;
 
 namespace XDF.Web
 {
@@ -81,7 +82,7 @@ namespace XDF.Web
                 c.RoutePrefix = "swagger";
             });
             app.UseSwagger();
-            //app.UseErrorHandling();
+            app.UseErrorHandling();
             app.UseMvc();
             app.UseStaticFiles();
 

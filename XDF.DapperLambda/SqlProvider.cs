@@ -20,106 +20,106 @@ namespace XDF.DapperLambda
 
         public DynamicParameters Params { get; private set; }
 
-        //public SqlProvider<T> FormatGet()
-        //{
-        //    var selectSql = ResolveExpression.ResolveSelect(typeof(T).GetProperties(), Context.QuerySet.SelectExpression, 1);
+        public SqlProvider<T> FormatGet()
+        {
+            var selectSql = ResolveExpression.ResolveSelect(typeof(T).GetProperties(), Context.QuerySet.SelectExpression, 1);
 
-        //    var fromTableSql = FormatTableName();
+            var fromTableSql = FormatTableName();
 
-        //    var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
+            var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
 
-        //    var whereSql = whereParams.SqlCmd;
+            var whereSql = whereParams.SqlCmd;
 
-        //    Params = whereParams.Param;
+            Params = whereParams.Param;
 
-        //    var orderbySql = ResolveExpression.ResolveOrderBy(Context.QuerySet.OrderbyExpressionList);
+            var orderbySql = ResolveExpression.ResolveOrderBy(Context.QuerySet.OrderbyExpressionList);
 
-        //    SqlString = $"{selectSql} {fromTableSql} {whereSql} {orderbySql}";
+            SqlString = $"{selectSql} {fromTableSql} {whereSql} {orderbySql}";
 
-        //    return this;
-        //}
+            return this;
+        }
 
-        //public SqlProvider<T> FormatToList()
-        //{
-        //    var selectSql = ResolveExpression.ResolveSelect(typeof(T).GetProperties(), Context.QuerySet.SelectExpression, Context.QuerySet.TopNum);
+        public SqlProvider<T> FormatToList()
+        {
+            var selectSql = ResolveExpression.ResolveSelect(typeof(T).GetProperties(), Context.QuerySet.SelectExpression, Context.QuerySet.TopNum);
 
-        //    var fromTableSql = FormatTableName();
+            var fromTableSql = FormatTableName();
 
-        //    var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
+            var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
 
-        //    var whereSql = whereParams.SqlCmd;
+            var whereSql = whereParams.SqlCmd;
 
-        //    Params = whereParams.Param;
+            Params = whereParams.Param;
 
-        //    var orderbySql = ResolveExpression.ResolveOrderBy(Context.QuerySet.OrderbyExpressionList);
+            var orderbySql = ResolveExpression.ResolveOrderBy(Context.QuerySet.OrderbyExpressionList);
 
-        //    SqlString = $"{selectSql} {fromTableSql} {whereSql} {orderbySql}";
+            SqlString = $"{selectSql} {fromTableSql} {whereSql} {orderbySql}";
 
-        //    return this;
-        //}
+            return this;
+        }
 
-        //public SqlProvider<T> FormatToPageList(int pageIndex, int pageSize)
-        //{
-        //    var orderbySql = ResolveExpression.ResolveOrderBy(Context.QuerySet.OrderbyExpressionList);
-        //    if (string.IsNullOrEmpty(orderbySql))
-        //        throw new Exception("分页查询需要排序条件");
+        public SqlProvider<T> FormatToPageList(int pageIndex, int pageSize)
+        {
+            var orderbySql = ResolveExpression.ResolveOrderBy(Context.QuerySet.OrderbyExpressionList);
+            if (string.IsNullOrEmpty(orderbySql))
+                throw new Exception("分页查询需要排序条件");
 
-        //    var selectSql = ResolveExpression.ResolveSelect(typeof(T).GetProperties(), Context.QuerySet.SelectExpression, pageSize);
+            var selectSql = ResolveExpression.ResolveSelect(typeof(T).GetProperties(), Context.QuerySet.SelectExpression, pageSize);
 
-        //    var fromTableSql = FormatTableName();
+            var fromTableSql = FormatTableName();
 
-        //    var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
+            var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
 
-        //    var whereSql = whereParams.SqlCmd;
+            var whereSql = whereParams.SqlCmd;
 
-        //    Params = whereParams.Param;
+            Params = whereParams.Param;
 
-        //    SqlString = $"SELECT COUNT(1) {fromTableSql} {whereSql};";
-        //    SqlString += $@"{selectSql}
-        //    FROM    ( SELECT *
-        //              ,ROW_NUMBER() OVER ( {orderbySql} ) AS ROWNUMBER
-        //              {fromTableSql}
-        //              {whereSql}
-        //            ) T
-        //    WHERE   ROWNUMBER > {(pageIndex - 1) * pageSize}
-        //            AND ROWNUMBER <= {pageIndex * pageSize} {orderbySql};";
+            SqlString = $"SELECT COUNT(1) {fromTableSql} {whereSql};";
+            SqlString += $@"{selectSql}
+            FROM    ( SELECT *
+                      ,ROW_NUMBER() OVER ( {orderbySql} ) AS ROWNUMBER
+                      {fromTableSql}
+                      {whereSql}
+                    ) T
+            WHERE   ROWNUMBER > {(pageIndex - 1) * pageSize}
+                    AND ROWNUMBER <= {pageIndex * pageSize} {orderbySql};";
 
-        //    return this;
-        //}
+            return this;
+        }
 
-        //public SqlProvider<T> FormatCount()
-        //{
-        //    var selectSql = "SELECT COUNT(1)";
+        public SqlProvider<T> FormatCount()
+        {
+            var selectSql = "SELECT COUNT(1)";
 
-        //    var fromTableSql = FormatTableName();
+            var fromTableSql = FormatTableName();
 
-        //    var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
+            var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
 
-        //    var whereSql = whereParams.SqlCmd;
+            var whereSql = whereParams.SqlCmd;
 
-        //    Params = whereParams.Param;
+            Params = whereParams.Param;
 
-        //    SqlString = $"{selectSql} {fromTableSql} {whereSql} ";
+            SqlString = $"{selectSql} {fromTableSql} {whereSql} ";
 
-        //    return this;
-        //}
+            return this;
+        }
 
-        //public SqlProvider<T> FormatExists()
-        //{
-        //    var selectSql = "SELECT TOP 1 1";
+        public SqlProvider<T> FormatExists()
+        {
+            var selectSql = "SELECT TOP 1 1";
 
-        //    var fromTableSql = FormatTableName();
+            var fromTableSql = FormatTableName();
 
-        //    var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
+            var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
 
-        //    var whereSql = whereParams.SqlCmd;
+            var whereSql = whereParams.SqlCmd;
 
-        //    Params = whereParams.Param;
+            Params = whereParams.Param;
 
-        //    SqlString = $"{selectSql} {fromTableSql} {whereSql}";
+            SqlString = $"{selectSql} {fromTableSql} {whereSql}";
 
-        //    return this;
-        //}
+            return this;
+        }
 
         public SqlProvider<T> FormatDelete()
         {
@@ -164,50 +164,50 @@ namespace XDF.DapperLambda
             return this;
         }
 
-        //public SqlProvider<T> FormatSum(LambdaExpression lambdaExpression)
-        //{
-        //    var selectSql = ResolveExpression.ResolveSum(typeof(T).GetProperties(), lambdaExpression);
+        public SqlProvider<T> FormatSum(LambdaExpression lambdaExpression)
+        {
+            var selectSql = ResolveExpression.ResolveSum(typeof(T).GetProperties(), lambdaExpression);
 
-        //    var fromTableSql = FormatTableName();
+            var fromTableSql = FormatTableName();
 
-        //    var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
+            var whereParams = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
 
-        //    var whereSql = whereParams.SqlCmd;
+            var whereSql = whereParams.SqlCmd;
 
-        //    Params = whereParams.Param;
+            Params = whereParams.Param;
 
-        //    SqlString = $"{selectSql} {fromTableSql} {whereSql} ";
+            SqlString = $"{selectSql} {fromTableSql} {whereSql} ";
 
-        //    return this;
-        //}
+            return this;
+        }
 
-        //public SqlProvider<T> FormatUpdateSelect(Expression<Func<T, T>> updator)
-        //{
-        //    var update = ResolveExpression.ResolveUpdate(updator);
+        public SqlProvider<T> FormatUpdateSelect(Expression<Func<T, T>> updator)
+        {
+            var update = ResolveExpression.ResolveUpdate(updator);
 
-        //    var selectSql = ResolveExpression.ResolveSelectOfUpdate(typeof(T).GetProperties(), Context.QuerySet.SelectExpression);
+            var selectSql = ResolveExpression.ResolveSelectOfUpdate(typeof(T).GetProperties(), Context.QuerySet.SelectExpression);
 
-        //    var where = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
+            var where = ResolveExpression.ResolveWhere(Context.QuerySet.WhereExpression);
 
-        //    var whereSql = where.SqlCmd;
+            var whereSql = where.SqlCmd;
 
-        //    Params = where.Param;
-        //    Params.AddDynamicParams(update.Param);
+            Params = where.Param;
+            Params.AddDynamicParams(update.Param);
 
-        //    var topSql = Context.QuerySet.TopNum.HasValue ? " TOP " + Context.QuerySet.TopNum.Value : "";
-        //    SqlString = $"UPDATE {topSql} {FormatTableName(false)} WITH ( UPDLOCK, READPAST ) {update.SqlCmd} {selectSql} {whereSql}";
+            var topSql = Context.QuerySet.TopNum.HasValue ? " TOP " + Context.QuerySet.TopNum.Value : "";
+            SqlString = $"UPDATE {topSql} {FormatTableName(false)} WITH ( UPDLOCK, READPAST ) {update.SqlCmd} {selectSql} {whereSql}";
 
-        //    return this;
-        //}
+            return this;
+        }
 
         private string FormatTableName(bool isNeedFrom = true)
         {
             Type typeOfTableClass;
             switch (Context.OperateType)
             {
-                //case EOperateType.Query:
-                //    typeOfTableClass = Context.QuerySet.TableType;
-                //    break;
+                case EOperateType.Query:
+                    typeOfTableClass = Context.QuerySet.TableType;
+                    break;
                 case EOperateType.Command:
                     typeOfTableClass = Context.CommandSet.TableType;
                     break;

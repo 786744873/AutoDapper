@@ -28,6 +28,7 @@ namespace XDF.DapperLambda.Expressions
                     break;
 
                 case ExpressionType.MemberAccess:
+                    return expression;
                     var mExpression = expression as MemberExpression;
                     var root = mExpression.GetRootMember();
                     if (root != null)

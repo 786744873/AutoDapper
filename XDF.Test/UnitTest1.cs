@@ -9,8 +9,9 @@ namespace XDF.Test
     public class StudentInfo
     {
         //自定义序列化的字段名称
-        [JsonProperty("CName")]
+        [JsonProperty("sName")]
         public string Name { get; set; }
+        [JsonProperty("sAge")]
         public int Age { get; set; }
         [JsonIgnore]
         public DateTime Birthday { get; set; }
@@ -21,6 +22,7 @@ namespace XDF.Test
         public void Test1()
         {
             var json=JsonConvert.SerializeObject(new StudentInfo { Name = "张三", Age = 18, Birthday = DateTime.Now });
+            StudentInfo model= JsonConvert.DeserializeObject<StudentInfo>(json);
         }
 
         [Fact]
