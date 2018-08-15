@@ -1,0 +1,137 @@
+﻿<%@ CodeTemplate Language="C#" TargetLanguage="C#" ResponseEncoding="UTF-8" Description="Generates a single entity business class." Debug="True" %>
+
+<%-- Required Properties  --%>
+
+<%@ Property Name="Table" Type="TableSchema" Optional="False" DeepLoad="True" Category="Optional" Description="If true, the template will not output using and namespace statements." %>
+
+<%@ Property Name="库名" Type="System.String" %>
+<%@ Assembly Name="SchemaExplorer" %>
+<%@ Import Namespace="SchemaExplorer" %>
+
+
+<script runat="template">
+   private string GetTableName(string v)
+        {
+            string a = Table.Name.Remove(0,Table.Name.IndexOf("_")+1).Replace("_","");
+            a=a.Substring(0, 1).ToUpper()+a.Substring(1);
+            return a;
+        }
+</script>
+//基本字段:  " <%= GetCol() %> ";
+//主键：     "<%=Table.PrimaryKey.MemberColumns[0].Name%>";
+//@基本字段：" <%= GetColp() %> ";
+//表名：     " <%=Table.Name%> ";
+//更新sql： " <%=GetColu()%> ";
+//是否自增： <%= Table.Columns.Find(c=>c.IsPrimaryKeyMember&&c.ExtendedProperties["CS_IsIdentity"].Value.ToString()=="False")==null?"true":"false"%>;
+
+<script runat="template">
+ private string GetCol()
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in Table.Columns)
+            {
+                if(!m.IsPrimaryKeyMember)
+                {
+                     if(i>0)
+                {
+                    if(m.NativeType=="point"){
+                        sql+=",AsText("+m.Name+") as "+m.Name;
+                    }else{
+                        sql+=","+m.Name+"";
+                    }
+                    
+                }
+                else
+                {
+                     if(m.NativeType=="point"){
+                         sql+="AsText("+m.Name+") as "+m.Name;
+                     }
+                     else{
+                          sql+=""+m.Name+"";
+                     }
+                    
+                }
+              
+               i++; 
+                }
+               
+            }
+            
+            return sql;
+        }
+         private string GetColAll()
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in Table.Columns)
+            {
+                
+                if(i>0)
+                {
+                    sql+=",["+m.Name+"]";
+                }
+                else
+                {
+                    sql+="["+m.Name+"]";
+                }
+                
+               i++; 
+            }
+            
+            return sql;
+        }
+         private string GetColp()
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in Table.Columns)
+            {
+                if(!m.IsPrimaryKeyMember)
+                {
+                    
+                  if(i>0)
+                {
+                        sql+=",@"+m.Name;
+                }
+                else
+                {
+                        sql+="@"+m.Name;
+                }
+                
+               i++; 
+                }
+             
+            }
+            
+            return sql;
+        }
+        
+             private string GetColu()
+        {
+            string sql="";
+            int i=0;
+            foreach(var m in Table.Columns)
+            {
+                if(!m.IsPrimaryKeyMember)
+                {
+                     if(i>0)
+                {
+                  
+                        sql+=","+m.Name+"=@"+m.Name;
+                }
+                else
+                {
+                    
+                        sql+=""+m.Name+"=@"+m.Name;
+                    
+                }
+                
+               i++; 
+                }
+               
+            }
+            
+            return sql;
+        }
+</script>

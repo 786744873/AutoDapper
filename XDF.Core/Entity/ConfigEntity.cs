@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using MySqlX.XDevAPI.Relational;
 
 namespace XDF.Core.Entity
 {
     /// <summary>
     /// 
     /// </summary>
+    [Table("BS_Config")]
     [Serializable]
     public partial class ConfigEntity
     {

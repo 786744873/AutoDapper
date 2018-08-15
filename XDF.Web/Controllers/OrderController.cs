@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using XDF.Core.Entity;
+using XDF.Core.Helper.Ajax;
+using XDF.DapperLambda;
 
 namespace XDF.Web.Controllers
 {
@@ -37,6 +41,15 @@ namespace XDF.Web.Controllers
         public OrderDetail Get(string orderCode)
         {
             return new OrderDetail() { OrderId = "1213arweqrwew", UserId = 100 };
+        }
+        [HttpGet]
+        [Route("AddConfig")]
+        public AjaxResultModel<int> AddConfig()
+        {
+            var con = new SqlConnection("user id=db_whbmowner;data source=10.202.202.245;password=levitra5gt#;persist security info=True;initial catalog =BJ20140915;Connect Timeout=300");
+          var res=  con.CommandSet<ConfigEntity>().Insert(new ConfigEntity(){SName = "test",SValue = "test",SDescription = "ceshi"});
+            con.Transaction(tc => { tc.CommandSet<ConfigEntity>().Insert(new ConfigEntity()); });
+            return AjaxResult.Success(res);
         }
     }
 }
