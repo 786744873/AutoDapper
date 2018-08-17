@@ -17,18 +17,12 @@ namespace XDF.DapperLambda.Expressions
             var type = expression.Type;
             switch (expression.NodeType)
             {
-                case ExpressionType.Equal:
-                case ExpressionType.Call:
-                    IsDeep = true;
-                    return expression;
-
                 case ExpressionType.Constant:
                     if (TypeHelper.GetNonNullableType(expression.Type) == TypeHelper.GetNonNullableType(type))
                         return Expression.Constant(((ConstantExpression)expression).Value, type);
                     break;
 
                 case ExpressionType.MemberAccess:
-                    return expression;
                     var mExpression = expression as MemberExpression;
                     var root = mExpression.GetRootMember();
                     if (root != null)
@@ -81,8 +75,10 @@ namespace XDF.DapperLambda.Expressions
                         if (b.Right.NodeType == ExpressionType.Constant)
                             return b.Left;
                     }
-
                     break;
+                default:
+                    IsDeep = true;
+                    return expression;
             }
 
             return expression;

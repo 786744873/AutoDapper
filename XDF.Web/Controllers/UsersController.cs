@@ -12,9 +12,7 @@ using XDF.Service;
 
 namespace XDF.Web.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
        
         // GET api/values
@@ -25,7 +23,6 @@ namespace XDF.Web.Controllers
             return res;
         }
         [HttpGet]
-        [Route("getUserInfo")]
         public AjaxResultModel<dynamic> Get(string token)
         {
             List<dynamic> menus = GetMenus();

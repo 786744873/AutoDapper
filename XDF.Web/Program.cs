@@ -19,6 +19,8 @@ namespace XDF.Web
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                //.ConfigureLogging(a => a.SetMinimumLevel(LogLevel.None)) //关闭日志
+                .ConfigureLogging(a => a.SetMinimumLevel(LogLevel.Error)) //日志级别
                 .UseStartup<Startup>();
     }
 }

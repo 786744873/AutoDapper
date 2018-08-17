@@ -17,12 +17,70 @@
             return a;
         }
 </script>
-//基本字段:  " <%= GetCol() %> ";
-//主键：     "<%=Table.PrimaryKey.MemberColumns[0].Name%>";
-//@基本字段：" <%= GetColp() %> ";
-//表名：     " <%=Table.Name%> ";
-//更新sql： " <%=GetColu()%> ";
-//是否自增： <%= Table.Columns.Find(c=>c.IsPrimaryKeyMember&&c.ExtendedProperties["CS_IsIdentity"].Value.ToString()=="False")==null?"true":"false"%>;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using XDF.Common.DataBase;
+using XDF.Common.Util;
+using XDF.<%=库名 %>.Model;
+
+namespace XDF.<%=库名 %>.DataLayer
+{
+    /// <summary>
+    /// <%=Table.Description %>DALC
+    /// </summary>
+    public class <%=GetTableName(Table.Name)%>DALC
+    {
+        /// <summary>
+        /// 插入一条新数据
+        /// </summary>
+        /// <param name="model">添加的数据</param>
+        /// <returns>改变行数</returns>
+        public static async Task<ResultModel<int>> Insert(<%=GetTableName(Table.Name)%>Entity model)
+        {
+            var sql = "insert into <%=Table.Name%> (<%= GetCol() %>) values (<%= GetColp() %> )";
+            var result = await SqlAdmin.InsertAsync(sql, model);
+            return Result.Success(result);
+        }
+
+        /// <summary>
+        /// 更新一条数据
+        /// </summary>
+        /// <param name="model">需要更新数据</param>
+        /// <returns>改变行数</returns>
+        public static async Task<ResultModel<int>> Update(<%=GetTableName(Table.Name)%>Entity model)
+        {
+            var sql = "update <%=Table.Name%> set <%=GetColu()%> where nSchoolId=@nSchoolId and <%=Table.PrimaryKey.MemberColumns[0].Name%>=@<%=Table.PrimaryKey.MemberColumns[0].Name%>";
+            var result = await SqlAdmin.UpdateAsync(sql, model);
+            return Result.Success(result);
+        }
+        /// <summary>
+        /// 根据主键获取
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static async Task<ResultModel< <%=GetTableName(Table.Name)%>Entity>> Find(long id)
+        {
+            var sql = "select <%= GetCol() %>  from <%=Table.Name%> where <%=Table.PrimaryKey.MemberColumns[0].Name%>=@<%=Table.PrimaryKey.MemberColumns[0].Name%> ";
+            var result = await SqlAdmin.FindAsync< <%=GetTableName(Table.Name)%>Entity>(sql, new { id });
+            return Result.Success(result);
+        }
+
+        /// <summary>
+        /// 分页查询数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public static async Task<ResultModel<List< <%=GetTableName(Table.Name)%>Entity>>> FindByPage(<%=GetTableName(Table.Name)%>Entity model, int pageIndex, int pageSize)
+        {
+            var sql = "select <%= GetCol() %>  from <%=Table.Name%> where nSchoolId=@nSchoolId";
+            var result = await SqlAdmin.FilterAsync< <%=GetTableName(Table.Name)%>Entity>(sql, model, pageIndex, pageSize);
+            return Result.Success(result);
+        }
+    }
+}
+
 
 <script runat="template">
  private string GetCol()
@@ -35,21 +93,15 @@
                 {
                      if(i>0)
                 {
-                    if(m.NativeType=="point"){
-                        sql+=",AsText("+m.Name+") as "+m.Name;
-                    }else{
+                    
                         sql+=","+m.Name+"";
-                    }
+                  
                     
                 }
                 else
                 {
-                     if(m.NativeType=="point"){
-                         sql+="AsText("+m.Name+") as "+m.Name;
-                     }
-                     else{
+                   
                           sql+=""+m.Name+"";
-                     }
                     
                 }
               
@@ -117,12 +169,10 @@
                 {
                      if(i>0)
                 {
-                  
                         sql+=","+m.Name+"=@"+m.Name;
                 }
                 else
                 {
-                    
                         sql+=""+m.Name+"=@"+m.Name;
                     
                 }

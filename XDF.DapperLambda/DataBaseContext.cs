@@ -1,5 +1,4 @@
-﻿using XDF.DapperLambda.Interface;
-using XDF.DapperLambda.Model;
+﻿using XDF.DapperLambda.Model;
 
 namespace XDF.DapperLambda
 {

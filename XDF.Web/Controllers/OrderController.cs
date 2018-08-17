@@ -24,23 +24,26 @@ namespace XDF.Web.Controllers
         /// 用户Id
         /// </summary>
         public int UserId { get; set; }
+        public  string OrderCode { get; set; }
     }
-    /// <summary>
-    /// 订单接口
-    /// </summary>
-    [Route("api/[controller]")]
-    [ApiController]
-    public class OrderController : ControllerBase
+
+    public class OrderController : BaseController
     {
         /// <summary>
         /// 获取订单详情
         /// </summary>
         /// <param name="orderCode">订单编号</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public OrderDetail Get(string orderCode)
         {
-            return new OrderDetail() { OrderId = "1213arweqrwew", UserId = 100 };
+            return new OrderDetail() { OrderCode=orderCode, OrderId = "1213arweqrwew", UserId = 100 };
+        }
+        [HttpPost]
+        [Route("InsertOrder")]
+        public OrderDetail InsertOrder(OrderDetail orderdetail)
+        {
+            return orderdetail;
         }
         [HttpGet]
         [Route("AddConfig")]

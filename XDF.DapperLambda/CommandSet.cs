@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq.Expressions;
 using Dapper;
 using XDF.DapperLambda.Helper;
-using XDF.DapperLambda.Interface;
 using XDF.DapperLambda.Model;
 
 namespace XDF.DapperLambda
