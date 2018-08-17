@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using XDF.Core.Helper.Ajax;
 using XDF.Core.Helper.Log;
 
 namespace XDF.Web.Controllers

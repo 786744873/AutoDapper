@@ -40,8 +40,8 @@ namespace XDF.Web.Controllers
             return new OrderDetail() { OrderCode=orderCode, OrderId = "1213arweqrwew", UserId = 100 };
         }
         [HttpPost]
-        [Route("InsertOrder")]
-        public OrderDetail InsertOrder(OrderDetail orderdetail)
+        [Route("GetOrderDetail")]
+        public OrderDetail GetOrderDetail(OrderDetail orderdetail)
         {
             return orderdetail;
         }

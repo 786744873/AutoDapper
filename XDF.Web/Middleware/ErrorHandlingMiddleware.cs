@@ -61,7 +61,6 @@ namespace XDF.Web.Middleware
                 if (!_ex.IsStringEmpty())
                 {
                     LogHelper.Error(context.Request.Path+_ex);
-                    //AppLogService.Instance.Error(_ex, context.Request.Path);
                 }
                 context.Response.ContentType = "application/json;charset=utf-8";
                 return context.Response.WriteAsync(AjaxResult.Error<string>(statusCode, msg).ToString());
