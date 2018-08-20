@@ -15,6 +15,7 @@ using Newtonsoft.Json.Serialization;
 using NLog.Extensions.Logging;
 using NLog.Web;
 using Swashbuckle.AspNetCore.Swagger;
+using XDF.Core.Helper.Ajax;
 using XDF.Web.Middleware;
 
 namespace XDF.Web
@@ -55,7 +56,21 @@ namespace XDF.Web
                 c.SwaggerDoc("v1", new Info { Title = "My API_1", Version = "v1" });
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "XDF.Web.XML"));
             });
-        
+            //api参数验证
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = actionContext =>
+                {
+                    var errors = actionContext.ModelState
+                        .Where(e => e.Value.Errors.Count > 0)
+                        .Select(e => new AjaxResultModel<string>
+                        {
+                            Msg = $"{e.Key}---{e.Value.Errors.First().ErrorMessage}"
+                        }).ToArray();
+
+                    return new BadRequestObjectResult(errors);
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

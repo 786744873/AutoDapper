@@ -16,9 +16,18 @@ namespace XDF.Web.Controllers
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-          var argDic=  context.ActionArguments;
-           LogHelper.Info(argDic.ToJson());
-           base.OnActionExecuting(context);
+            int s = 123_456;
+            var argDic = context.ActionArguments;
+            LogHelper.Info(argDic.ToJson());
+            var stuInfo = GetStuInfo(19);
+            LogHelper.Info(stuInfo.age.ToString());
+            LogHelper.Info(stuInfo.name);
+            base.OnActionExecuting(context);
+        }
+
+        public (string name, int age) GetStuInfo(long id)
+        {
+            return ("xiaoming", 18);
         }
     }
 }
