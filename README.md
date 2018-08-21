@@ -1,6 +1,5 @@
 ## .net core2.1+Dapper+MySql
 ##  Redis+RabbitMq+MongoDb+NLog
-##  VS2017
 ##  Vue+webpack
 基于.net core2.1开发，对dapper进一步封装，三层架构，业务层，数据层全是代码生成器实现（CodeSmith）！无需手写
 
