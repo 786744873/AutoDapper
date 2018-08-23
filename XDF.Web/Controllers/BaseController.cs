@@ -10,24 +10,25 @@ using XDF.Core.Helper.Log;
 
 namespace XDF.Web.Controllers
 {
+    /// <summary>
+    /// 父类，所有controller都要继承base
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class BaseController : Controller
     {
+        /// <summary>
+        /// 重写执行action之前调用方法
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            int s = 123_456;
             var argDic = context.ActionArguments;
-            LogHelper.Info(argDic.ToJson());
-            var stuInfo = GetStuInfo(19);
-            LogHelper.Info(stuInfo.age.ToString());
-            LogHelper.Info(stuInfo.name);
+            if (argDic.Any())
+            {
+                LogHelper.Info(argDic.ToJson());
+            }
             base.OnActionExecuting(context);
-        }
-
-        public (string name, int age) GetStuInfo(long id)
-        {
-            return ("xiaoming", 18);
         }
     }
 }

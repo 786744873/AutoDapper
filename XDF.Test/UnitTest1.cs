@@ -58,7 +58,17 @@ namespace XDF.Test
 
             var tAge = Teacher.GetName();
             var sAge = StudentInfo.GetName();
+            List<string> list = null;
             
+            //list.ForEach(m =>
+            //{
+
+            //});
+            foreach (var item in list)
+            {
+                
+            }
+
         }
 
         [Fact]

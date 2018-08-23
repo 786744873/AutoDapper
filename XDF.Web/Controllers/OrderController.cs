@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace XDF.Web.Controllers
         public  string OrderCode { get; set; }
     }
 
-    public class OrderController : BaseController
+    public class OrderController: BaseController
     {
         /// <summary>
         /// 获取订单详情
@@ -52,6 +53,58 @@ namespace XDF.Web.Controllers
             var con = new SqlConnection("user id=db_whbmowner;data source=10.202.202.245;password=levitra5gt#;persist security info=True;initial catalog =BJ20140915;Connect Timeout=300");
             var res = con.QuerySet<ConfigEntity>().Where(m=>m.Id>=1).ToList();
             return AjaxResult.Success(res);
+        }
+        [HttpGet]
+        [Route("Index")]
+        public async Task<AjaxResultModel<string>> Index()
+        {
+            Task<string> nameA = MethodA();
+            Task<string> nameB = MethodB();
+            var date = DateTime.Now.ToString("yyMMdd");
+            string NameA = await nameA;
+            string NameB = await nameB;
+            var newdate = $"{DateTime.Now:yyMMdd}";
+            return AjaxResult.Success(date + "--" + NameA + "---" + NameB + "--" + newdate);
+
+            //string date = DateTime.Now.ToString();
+            //string nameA = await MethodA();
+            //string nameB = await MethodB();
+            //string newdate = DateTime.Now.ToString();
+            //return AjaxResult.Success(date+"--"+nameA+"---"+nameB+"--"+newdate);
+        }
+        [HttpGet]
+        [Route("Index1")]
+        public async Task<AjaxResultModel<string>> Index1()
+        {
+            //Task<string> nameA = MethodA();
+            //Task<string> nameB = MethodB();
+            //var date = DateTime.Now.ToString();
+            //ViewBag.NameA = await nameA;
+            //ViewBag.NameB = await nameB;
+            //var newdate = DateTime.Now.ToString();
+            //return AjaxResult.Success(date + "--" + ViewBag.NameA + "---" + ViewBag.NameB + "--" + newdate);
+
+            string date = DateTime.Now.ToString();
+            string nameA = await MethodA();
+            string nameB = await MethodB();
+            string newdate = DateTime.Now.ToString();
+            return AjaxResult.Success(date + "--" + nameA + "---" + nameB + "--" + newdate);
+        }
+        public async Task<string> MethodA()
+        {
+            return await Task.Run(() =>
+            {
+                Thread.Sleep(5000);
+                return $"我是MethodA返回值{DateTime.Now.ToString()}";
+            });
+        }
+        public async Task<string> MethodB()
+        {
+            return await Task.Run(() =>
+            {
+                Thread.Sleep(3000);
+                return $"我是MethodB返回值{DateTime.Now.ToString()}";
+            });
         }
     }
 }
