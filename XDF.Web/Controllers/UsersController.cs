@@ -17,7 +17,8 @@ namespace XDF.Web.Controllers
        
         // GET api/values
         [HttpGet]
-        public PageListModel<UserEntity> Get([FromQuery]PageListModel<UserEntity> info)
+        [Route("GetAll")]
+        public PageListModel<UserEntity> GetAll([FromQuery]PageListModel<UserEntity> info)
         {
             var res = UserService.Instance.Filter(info);
             return res;

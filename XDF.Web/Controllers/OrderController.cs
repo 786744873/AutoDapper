@@ -42,9 +42,9 @@ namespace XDF.Web.Controllers
         }
         [HttpPost]
         [Route("GetOrderDetail")]
-        public OrderDetail GetOrderDetail(OrderDetail orderdetail)
+        public string GetOrderDetail(OrderDetail orderdetail)
         {
-            return orderdetail;
+            return "23423";
         }
         [HttpGet]
         [Route("AddConfig")]
@@ -76,14 +76,6 @@ namespace XDF.Web.Controllers
         [Route("Index1")]
         public async Task<AjaxResultModel<string>> Index1()
         {
-            //Task<string> nameA = MethodA();
-            //Task<string> nameB = MethodB();
-            //var date = DateTime.Now.ToString();
-            //ViewBag.NameA = await nameA;
-            //ViewBag.NameB = await nameB;
-            //var newdate = DateTime.Now.ToString();
-            //return AjaxResult.Success(date + "--" + ViewBag.NameA + "---" + ViewBag.NameB + "--" + newdate);
-
             string date = DateTime.Now.ToString();
             string nameA = await MethodA();
             string nameB = await MethodB();

@@ -76,7 +76,7 @@ namespace XDF.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseErrorHandling();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -87,7 +87,8 @@ namespace XDF.Web
                 builder.AllowAnyHeader();
                 builder.AllowAnyMethod();
             });
-           
+            //错误中间件
+            app.UseErrorHandling();
             //添加NLog
             loggerFactory.AddNLog();
             env.ConfigureNLog("nlog.config");//读取Nlog配置文件

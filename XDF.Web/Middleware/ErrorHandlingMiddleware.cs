@@ -13,59 +13,58 @@ namespace XDF.Web.Middleware
 {
     public class ErrorHandlingMiddleware
     {
-            private readonly RequestDelegate _next;
-            private string _ex = "";
+        private readonly RequestDelegate _next;
+        private string _ex = "";
 
-            public ErrorHandlingMiddleware(RequestDelegate next)
+        public ErrorHandlingMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            _ex = "";
+            try
             {
-                _next = next;
+                await _next(context);
             }
-
-            public async Task Invoke(HttpContext context)
+            catch (Exception ex)
             {
-                _ex = "";
-                try
+                _ex = ex.Message + ":" + ex.StackTrace;
+            }
+            finally
+            {
+                if (context.Response.StatusCode > 400 || !_ex.IsStringEmpty())
                 {
-
-                    await _next(context);
-                }
-                catch (Exception ex)
-                {
-                    _ex = ex.Message + ":" + ex.StackTrace;
-                }
-                finally
-                {
-                    if (context.Response.StatusCode > 400 || !_ex.IsStringEmpty())
-                    {
-                        await HandleExceptionAsync(context);
-                    }
+                    await HandleExceptionAsync(context);
                 }
             }
+        }
 
-            private Task HandleExceptionAsync(HttpContext context)
+        private Task HandleExceptionAsync(HttpContext context)
+        {
+            var statusCode = context.Response.StatusCode;
+            var msg = "服务器内部错误";
+            switch (statusCode)
             {
-                var statusCode = context.Response.StatusCode;
-                var msg = "服务器内部错误";
-                switch (statusCode)
-                {
-                    case 401:
-                        msg = "未授权";
-                        break;
-                    case 404:
-                        msg = "未找到接口";
-                        break;
-                    case 500:
-                        msg = "服务器内部错误";
-                        break;
-                }
-                if (!_ex.IsStringEmpty())
-                {
-                    LogHelper.Error(context.Request.Path+_ex);
-                }
-                context.Response.ContentType = "application/json;charset=utf-8";
-                return context.Response.WriteAsync(AjaxResult.Error<string>(statusCode, msg).ToString());
+                case 401:
+                    msg = "未授权";
+                    break;
+                case 404:
+                    msg = "未找到接口";
+                    break;
+                case 500:
+                    msg = "服务器内部错误";
+                    break;
             }
-        
+            if (!_ex.IsStringEmpty())
+            {
+                LogHelper.Error(context.Request.Path + _ex);
+            }
+            context.Response.ContentType = "application/json;charset=utf-8";
+            return context.Response.WriteAsync(AjaxResult.Error<string>(statusCode, msg).ToString());
+        }
+
     }
     public static class ErrorHandleExtensions
     {
