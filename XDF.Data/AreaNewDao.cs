@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using XDF.Core.Entity;
-
+   
 namespace XDF.Data
 {
    public partial class AreaNewDao : BaseDao<AreaNewEntity>
