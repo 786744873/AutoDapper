@@ -73,7 +73,7 @@ namespace XDF.Data
         {
             var sql= $"SELECT {_Primary},{_Field} FROM {_Table}";
             return dapperHelper.Filter<T>(sql.ToString(), null);
-        }
+        }  
         public PageListModel<T> Filter<T>(PageListModel<T> info)
         {
             if (info.Primary.IsStringEmpty())
