@@ -1,5 +1,4 @@
-﻿
-using XDF.Core.Entity;
+﻿using XDF.Core.Entity;
 
 namespace XDF.Data
 {
@@ -7,7 +6,7 @@ namespace XDF.Data
     /// Dao
     /// </summary>
     public partial class ConfigDao : BaseDao<ConfigEntity>
-    {
+    {  
         public ConfigDao() : base("XDF")
         {
             base._Field = " [sName],[sValue],[sDescription] ";
