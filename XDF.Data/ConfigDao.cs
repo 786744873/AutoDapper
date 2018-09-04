@@ -1,7 +1,7 @@
 ﻿using XDF.Core.Entity;
 
 namespace XDF.Data
-{
+{  
     /// <summary>
     /// Dao
     /// </summary>
