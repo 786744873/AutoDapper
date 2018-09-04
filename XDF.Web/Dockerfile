@@ -1,26 +1,13 @@
-#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
-#For more information, please see https://aka.ms/containercompat
-
-FROM microsoft/dotnet:2.1-aspnetcore-runtime-nanoserver-1709 AS base
+# 添加基础镜像
+FROM microsoft/dotnet:2.1-aspnetcore-runtime
+#容器中系统的工作空间
 WORKDIR /app
+#拷贝当前文件夹下的文件到容器中系统的工作空间
+COPY . /app
+ 
+#设置Docker容器对外暴露的端口
 EXPOSE 80
-
-FROM microsoft/dotnet:2.1-sdk-nanoserver-1709 AS build
-WORKDIR /src
-COPY ["XDF.Web/XDF.Web.csproj", "XDF.Web/"]
-COPY ["XDF.Service/XDF.Service.csproj", "XDF.Service/"]
-COPY ["XDF.Data/XDF.Data.csproj", "XDF.Data/"]
-COPY ["XDF.Core/XDF.Core.csproj", "XDF.Core/"]
-COPY ["XDF.DapperLambda/XDF.DapperLambda.csproj", "XDF.DapperLambda/"]
-RUN dotnet restore "XDF.Web/XDF.Web.csproj"
-COPY . .
-WORKDIR "/src/XDF.Web"
-RUN dotnet build "XDF.Web.csproj" -c Release -o /app
-
-FROM build AS publish
-RUN dotnet publish "XDF.Web.csproj" -c Release -o /app
-
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app .
+#容器中使用 ["dotnet","系统启动的dll"] 来运行应用程序
+#使用ENTRYPOINT ["dotnet","系统启动的dll"]
+#或使用 CMD ["dotnet","系统启动的dll"]
 ENTRYPOINT ["dotnet", "XDF.Web.dll"]
