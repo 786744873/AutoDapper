@@ -36,8 +36,8 @@ namespace XDF.Web.Controllers
         /// <param name="orderCode">订单编号</param>
         /// <returns></returns>
         [HttpPost]
-        public OrderDetail Get(string orderCode)
-        {
+        public async Task<OrderDetail> Get([FromBody]string orderCode)
+        {   
             return new OrderDetail() { OrderCode=orderCode, OrderId = "1213arweqrwew", UserId = 100 };
         }
         [HttpPost]

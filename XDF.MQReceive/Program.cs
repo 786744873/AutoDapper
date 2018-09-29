@@ -17,17 +17,21 @@ namespace XDF.MQReceive
         }
         static void Main(string[] args)
         {
-            var input = Input();
-            while (input.ToLower() != "n")
+            RabbitMqService.Instance.Pull<MessageModel>(msg =>
             {
-                RabbitMqService.Instance.Pull<MessageModel>(msg =>
-                {
-                    Console.WriteLine(msg.ToJson());
-                });
+                Console.WriteLine(msg.ToJson());
+            });
+            //var input = Input();
+            //while (input.ToLower() != "n")
+            //{
+            //    RabbitMqService.Instance.Pull<MessageModel>(msg =>
+            //    {
+            //        Console.WriteLine(msg.ToJson());
+            //    });
 
-                input = Input();
-            }
-            RabbitMqService.Instance.Dispose();
+            //    input = Input();
+            //}
+            //RabbitMqService.Instance.Dispose();
         }
     }
 }

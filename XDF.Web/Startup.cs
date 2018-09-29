@@ -65,7 +65,7 @@ namespace XDF.Web
                         .Where(e => e.Value.Errors.Count > 0)
                         .Select(e => new AjaxResultModel<string>
                         {
-                            Msg = $"{e.Key}---{e.Value.Errors.First().ErrorMessage}"
+                            Msg = $"{e.Key}--{e.Value.Errors.First().ErrorMessage}"
                         }).ToArray();
 
                     return new BadRequestObjectResult(errors);

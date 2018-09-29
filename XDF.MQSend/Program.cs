@@ -9,18 +9,30 @@ namespace XDF.MQSend
     {
         static void Main(string[] args)
         {
-            var input = Input();
-
-            while (input != "exit")
+           
+            for (int i = 0; i < 100000; i++)
             {
                 var log = new MessageModel
                 {
                     CreateDateTime = DateTime.Now,
-                    Msg = input
+                    Msg = i.ToString()
                 };
                 RabbitMqService.Instance.Publish(log);
-                input = Input();
+                Console.WriteLine(log.ToJson());
             }
+
+            Console.ReadKey();
+            // var input = Input();
+            //while (input != "exit")
+            //{
+            //    var log = new MessageModel
+            //    {
+            //        CreateDateTime = DateTime.Now,
+            //        Msg = input
+            //    };
+            //    RabbitMqService.Instance.Publish(log);
+            //    input = Input();
+            //}
         }
 
         private static string Input()

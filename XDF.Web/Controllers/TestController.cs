@@ -12,14 +12,15 @@ namespace XDF.Web.Controllers
     public class Person
     {
         public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string LastName { get; set; } = "富帅";
     }
     public class TestController : BaseController
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpPost]
+        [Route("GetPerson")]
+        public Person Get(Person p)
         {
-            return null;
+            return p;
         }
     }
 }
